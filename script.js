@@ -95,7 +95,7 @@ function viewDeck(code){
 	}
 	else
 	{
-		html += '<h3>Sem unidades.</h3>';
+		html += '<h3>Sem seguidores.</h3>';
 	}
 	html += `<h2>Feitiços</h2>`;
 	if (spells.length > 0){
