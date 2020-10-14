@@ -96,7 +96,6 @@ function viewVeredito(codes){
 	let cards = [];
 	const veredito = document.querySelector('#veredito');
 	let ok = true;
-	let mensagem = '';
 
 	codes.forEach((code) => {
 		const deck = decode(code);
@@ -117,14 +116,8 @@ function viewVeredito(codes){
 	if (ok)
 	{
 		veredito.classList.add('tudo-certo');
-		mensagem = '<h1>Tudo certo, não há cartas repetidas aqui!</h1>';
+		veredito.insertAdjacentHTML('beforeend', '<h1>Tudo certo, não há cartas repetidas aqui!</h1>');
 	}
-	else
-	{
-		mensagem = '';
-	}
-
-	veredito.insertAdjacentHTML('beforeend', mensagem);
 }
 
 function checkDecks(){
