@@ -122,7 +122,7 @@ function viewVeredito(codes){
 	else
 	{
 		veredito.classList.add('erro');
-		mensagem = '<h1>As cartas repetidas foram marcadas com borda vermelha.</h1>';
+		mensagem = '';
 	}
 
 	veredito.insertAdjacentHTML('beforeend', mensagem);
