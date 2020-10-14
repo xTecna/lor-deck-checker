@@ -54,6 +54,7 @@ function viewDeck(code){
 	let champions = [];
 	let followers = [];
 	let spells = [];
+	let landmarks = [];
 
 	deck.forEach((card) => {
 		let data = card_data.find(value => card.cardId == value.cardCode);
@@ -63,30 +64,57 @@ function viewDeck(code){
 			followers.push({ ...data, 'qtd': card.quantity});
 		} else if (data.type == 'Feitiço'){
 			spells.push({ ...data, 'qtd': card.quantity});
+		} else if (data.type == 'Monumento'){
+			landmarks.push({ ...data, 'qtd': card.quantity});
 		}
 	});
 
 	champions.sort(compare);
 	followers.sort(compare);
 	spells.sort(compare);
+	landmarks.sort(compare);
 
 	let html = `<div class="deck">${renderDeckPreview(code)}`;
-
 	html += `<div class="deck-completo"><h2>Campeões</h2>`;
-	champions.forEach((card) => {
-		const region = card.cardCode.substring(2, 4);
-		html += `<div class="card ${src_regions[region]}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qtd}</span></div>`
-	});
-	html += `<h2>Seguidores</h2>`
-	followers.forEach((card) => {
-		const region = card.cardCode.substring(2, 4);
-		html += `<div class="card ${src_regions[region]}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qtd}</span></div>`
-	});
-	html += `<h2>Feitiços</h2>`
-	spells.forEach((card) => {
-		const region = card.cardCode.substring(2, 4);
-		html += `<div class="card ${src_regions[region]}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qtd}</span></div>`
-	});
+	if (champions.length > 0){
+		champions.forEach((card) => {
+			const region = card.cardCode.substring(2, 4);
+			html += `<div class="card ${src_regions[region]}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qtd}</span></div>`
+		});
+	}
+	else
+	{
+		html += '<h3>Sem campeões.</h3>';
+	}
+	html += `<h2>Seguidores</h2>`;
+	if (followers.length > 0){
+		followers.forEach((card) => {
+			const region = card.cardCode.substring(2, 4);
+			html += `<div class="card ${src_regions[region]}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qtd}</span></div>`
+		});
+	}
+	else
+	{
+		html += '<h3>Sem unidades.</h3>';
+	}
+	html += `<h2>Feitiços</h2>`;
+	if (spells.length > 0){
+		spells.forEach((card) => {
+			const region = card.cardCode.substring(2, 4);
+			html += `<div class="card ${src_regions[region]}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qtd}</span></div>`
+		});
+	}
+	else
+	{
+		html += '<h3>Sem feitiços.</h3>';
+	}
+	if (landmarks.length > 0){
+		html += `<h2>Monumentos</h2>`;
+		landmarks.forEach((card) => {
+			const region = card.cardCode.substring(2, 4);
+			html += `<div class="card ${src_regions[region]}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qtd}</span></div>`
+		});
+	}
 	html += '</div>';
 
 	content.insertAdjacentHTML('beforeend', html);
