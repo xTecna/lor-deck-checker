@@ -40,5 +40,8 @@ const src_champions = {
 	"03SI005": "Nocturne",
 	"03MT087": "AurelionSol",
 	"03FR006": "Trundle",
-	"03MT056": "Diana"
+	"03MT056": "Diana",
+	"03DE011": "Shyvana",
+	"03BW004": "TahmKench",
+	"03MT055": "Soraka"
 }
