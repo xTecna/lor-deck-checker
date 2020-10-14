@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Checador de Deck Feião</title>
+		<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel='stylesheet' href='style.css'/>
+	</head>
+	<body>
+		<div id="content">
+			<div id="formulario">
+				<label for="deck1">Deck 1:</label><input type="text" name="deck1"></input>
+				<label for="deck2">Deck 2:</label><input type="text" name="deck2"></input>
+				<label for="deck3">Deck 3:</label><input type="text" name="deck3"></input>
+				<button id="check_decks" onClick="checkDecks();">Avaliar</button>
+			</div>
+			<div id="veredito">
+			</div>
+			<div id="decks">
+			</div>
+		</div>
+		<script src="deckCodeDecoder.js"></script>
+		<script src="./assets/cards.js"></script>
+		<script src="./assets/regions.js"></script>
+		<script src="./assets/champions.js"></script>
+		<script src="script.js"></script>
+	</body>
+</html>
