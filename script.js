@@ -121,7 +121,6 @@ function viewVeredito(codes){
 	}
 	else
 	{
-		veredito.classList.add('erro');
 		mensagem = '';
 	}
 
