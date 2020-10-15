@@ -10,31 +10,27 @@ body
 {
 	width: 100%;
 	height: 100%;
-	color: #484646;
+	
 	background-color: #1A1A1A;
+}
+
+#site
+{
+	width: 100%;
+	height: 100%;
+
+	color: #484646;
 	font-family: 'Roboto', sans-serif;
 
 	display: flex;
 	flex-direction: column;
-	align-items: center;
-}
-
-#content
-{
-	width: 100%;
-
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
-	align-items: center;
 }
 
 #formulario
 {
 	width: 100%;
-	height: 50px;
 
-	padding: 5px;
+	padding: 1%;
 	color: #ffffff;
 
 	display: flex;
@@ -56,10 +52,14 @@ button
 	height: 20px;
 }
 
+#conteudo
+{
+	width: 100%;
+}
+
 #veredito
 {
 	width: 100%;
-	height: 50px;
 
 	display: flex;
 	flex-direction: row;
@@ -248,4 +248,23 @@ button
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+}
+
+#footer
+{
+	width: 100%;
+	height: 80px;
+
+	color: #000000;
+	background-color: #484646;
+
+	padding: 5px;
+
+	position: fixed;
+	bottom: 0;
+}
+
+#footer a
+{
+	color: #000000;
 }

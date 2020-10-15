@@ -172,12 +172,19 @@ function checkDecks(){
 	if (!ok){
 		veredito.classList.add('erro');
 		veredito.insertAdjacentHTML('beforeend', '<h1 class="error">Um dos códigos passados é inválido.</h1>');
+		document.querySelector('#footer').style.position = 'absolute';
 		return;
 	}
+
+	document.querySelector('#footer').style.position = '';
 
 	codes.forEach((code) => {
 		viewDeck(code);
 	});
+	document.querySelector('#conteudo').style.marginBottom = '80px';
 
 	viewVeredito(codes);
 }
+
+document.querySelector('#footer').style.position = 'absolute';
+document.querySelector('#footer').style.bottom = 0;
