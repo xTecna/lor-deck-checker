@@ -16,21 +16,17 @@ function compare(a, b){
 	return 0;
 }
 
-function renderDeckPreview(code){
-	const deck = decode(code);
-
+function renderDeckPreview(deck){
 	let champions = [];
 	let regions = [];
 
 	deck.forEach((card) => {
-		let data = card_data.find(value => card.cardId == value.cardCode);
-		const region = data.cardCode.substring(2, 4);
-		if (!regions.includes(src_regions[region])){
-			regions.push(src_regions[region]);
+		if (!regions.includes(card.region)){
+			regions.push(card.region);
 		}
 
-		if (data.type === "Campeão"){
-			champions.push(src_champions[data.cardCode]);
+		if (card.type === "Campeão"){
+			champions.push(card.name.replace(' ', ''));
 		}
 	})
 	
@@ -47,9 +43,8 @@ function renderDeckPreview(code){
 	return html;
 }
 
-function viewDeck(code){
+function viewDeck(deck){
 	const content = document.querySelector('#decks');
-	const deck = decode(code);
 
 	let champions = [];
 	let followers = [];
@@ -57,15 +52,14 @@ function viewDeck(code){
 	let landmarks = [];
 
 	deck.forEach((card) => {
-		let data = card_data.find(value => card.cardId == value.cardCode);
-		if (data.type == 'Campeão'){
-			champions.push({ ...data, 'qtd': card.quantity});
-		} else if (data.type == 'Unidade'){
-			followers.push({ ...data, 'qtd': card.quantity});
-		} else if (data.type == 'Feitiço'){
-			spells.push({ ...data, 'qtd': card.quantity});
-		} else if (data.type == 'Monumento'){
-			landmarks.push({ ...data, 'qtd': card.quantity});
+		if (card.type == 'Campeão'){
+			champions.push(card);
+		} else if (card.type == 'Unidade'){
+			followers.push(card);
+		} else if (card.type == 'Feitiço'){
+			spells.push(card);
+		} else if (card.type == 'Monumento'){
+			landmarks.push(card);
 		}
 	});
 
@@ -74,12 +68,11 @@ function viewDeck(code){
 	spells.sort(compare);
 	landmarks.sort(compare);
 
-	let html = `<div class="deck">${renderDeckPreview(code)}`;
+	let html = `<div class="deck">${renderDeckPreview(deck)}`;
 	html += `<div class="deck-completo"><h2>Campeões</h2>`;
 	if (champions.length > 0){
 		champions.forEach((card) => {
-			const region = card.cardCode.substring(2, 4);
-			html += `<div class="card ${src_regions[region]}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qtd}</span></div>`
+			html += `<div class="card ${card.region}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qtde}</span></div>`
 		});
 	}
 	else
@@ -89,8 +82,7 @@ function viewDeck(code){
 	html += `<h2>Seguidores</h2>`;
 	if (followers.length > 0){
 		followers.forEach((card) => {
-			const region = card.cardCode.substring(2, 4);
-			html += `<div class="card ${src_regions[region]}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qtd}</span></div>`
+			html += `<div class="card ${card.region}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qtde}</span></div>`
 		});
 	}
 	else
@@ -100,8 +92,7 @@ function viewDeck(code){
 	html += `<h2>Feitiços</h2>`;
 	if (spells.length > 0){
 		spells.forEach((card) => {
-			const region = card.cardCode.substring(2, 4);
-			html += `<div class="card ${src_regions[region]}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qtd}</span></div>`
+			html += `<div class="card ${card.region}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qtde}</span></div>`
 		});
 	}
 	else
@@ -111,8 +102,7 @@ function viewDeck(code){
 	if (landmarks.length > 0){
 		html += `<h2>Monumentos</h2>`;
 		landmarks.forEach((card) => {
-			const region = card.cardCode.substring(2, 4);
-			html += `<div class="card ${src_regions[region]}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qtd}</span></div>`
+			html += `<div class="card ${card.region}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qtde}</span></div>`
 		});
 	}
 	html += '</div>';
@@ -120,23 +110,21 @@ function viewDeck(code){
 	content.insertAdjacentHTML('beforeend', html);
 }
 
-function viewVeredito(codes){
-	let cards = [];
+function viewVeredito(decks){
 	const veredito = document.querySelector('#veredito');
+	let cards = [];
 	let ok = true;
 
-	codes.forEach((code) => {
-		const deck = decode(code);
-
+	decks.forEach((deck) => {
 		deck.forEach((card) => {
-			if (cards.indexOf(card.cardId) !== -1){
+			if (cards.indexOf(card.cardCode) !== -1){
 				ok = false;
-				const repetidas = document.getElementsByName(card.cardId);
+				const repetidas = document.getElementsByName(card.cardCode);
 				repetidas.forEach((repetida) => {
 					repetida.classList.add("repetida");
 				});
 			} else {
-				cards.push(card.cardId);
+				cards.push(card.cardCode);
 			}
 		});
 	});
@@ -148,42 +136,40 @@ function viewVeredito(codes){
 	}
 }
 
-function checkDecks(){
+async function checkDecks(){
 	const veredito = document.querySelector('#veredito');
-	const decks = document.querySelector('#decks');
-	let ok = true;
-	let codes = [];
+	const decks_element = document.querySelector('#decks');
+	const footer = document.querySelector('#footer');
+	let decks = [];
 
 	veredito.classList.remove('tudo-certo');
 	veredito.classList.remove('erro');
 	veredito.innerHTML = '';
-	decks.innerHTML = '';
+	decks_element.innerHTML = '';
 
 	for (let i = 1; i < 4; ++i){
-		const code = document.getElementsByName(`deck${i}`)[0].value;
-		if (code === '' || !isValid(code)){
-			ok = false;
-			break;
+		const code = document.querySelector(`#deck${i}`).value;
+		const response = await fetch(`https://leaderboardescola.herokuapp.com/deck/decode?deck=${code}`);
+
+		if (response.ok){
+			const result = await response.json();
+			decks.push(result);
 		}else{
-			codes.push(code);
+			veredito.classList.add('erro');
+			veredito.insertAdjacentHTML('beforeend', '<h1 class="error">Um dos códigos passados é inválido.</h1>');
+			footer.style.position = 'absolute';
+			return;
 		}
 	}
 
-	if (!ok){
-		veredito.classList.add('erro');
-		veredito.insertAdjacentHTML('beforeend', '<h1 class="error">Um dos códigos passados é inválido.</h1>');
-		document.querySelector('#footer').style.position = 'absolute';
-		return;
-	}
+	footer.style.position = '';
 
-	document.querySelector('#footer').style.position = '';
-
-	codes.forEach((code) => {
-		viewDeck(code);
+	decks.forEach((deck) => {
+		viewDeck(deck);
 	});
 	document.querySelector('#conteudo').style.marginBottom = '80px';
 
-	viewVeredito(codes);
+	viewVeredito(decks);
 }
 
 document.querySelector('#footer').style.position = 'absolute';
