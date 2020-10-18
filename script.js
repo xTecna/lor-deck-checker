@@ -1,49 +1,57 @@
-function isValid(code){
-	try
-	{
-		decode(code);
-		return true;
-	}
-	catch
-	{
-		return false;
-	}
-}
-
 function compare(a, b){
 	if (a.mana < b.mana)	return -1;
 	if (a.mana > b.mana)	return 1;
 	return 0;
 }
 
-function renderDeckPreview(deck){
-	let champions = [];
+function getRegions(deck){
 	let regions = [];
 
 	deck.forEach((card) => {
 		if (!regions.includes(card.region)){
 			regions.push(card.region);
 		}
+	});
 
+	return regions;
+}
+
+function getChampions(deck){
+	let champions = [];
+
+	deck.forEach((card) => {
 		if (card.type === "Campeão"){
 			champions.push(card.name.replace(' ', ''));
 		}
-	})
+	});
+
+	return champions;
+}
+
+function renderDeckPreview(deck){
+	const champions = getChampions(deck);
+	const regions = getRegions(deck);
+	let regions_string = '';
+
+	regions.sort();
+	regions.forEach((region) => {
+		regions_string += region;
+	});
 	
-	let html = `<div class="resumo-deck"><div class="regioes">`;
+	let html = `<div class="resumo-deck"><div class="regioes" name="${regions_string}">`;
 	regions.forEach(region => {
-		html += `<div class="regiao"><img src="http://dd.b.pvp.net/latest/core/en_us/img/regions/icon-${region}.png"></div>`;
+		html += `<div class="regiao" name="${region}" style="background-image: url('http://dd.b.pvp.net/latest/core/en_us/img/regions/icon-${region}.png');"></div>`;
 	})
-	html += '</div><div class="separador"></div><div class="campeoes">';
+	html += '</div><div class="campeoes">';
 	champions.forEach(champion => {
-		html += `<div class="campeao"><img src="http://ddragon.leagueoflegends.com/cdn/10.15.1/img/champion/${champion}.png"></div>`;
+		html += `<div class="campeao" name="${champion}" style="background-image: url('http://ddragon.leagueoflegends.com/cdn/10.15.1/img/champion/${champion}.png');"></div>`;
 	})
 	html += '</div></div>';
 
 	return html;
 }
 
-function viewDeck(deck){
+function viewDeck(deck, index){
 	const content = document.querySelector('#decks');
 
 	let champions = [];
@@ -72,7 +80,7 @@ function viewDeck(deck){
 	html += `<div class="deck-completo"><h2>Campeões</h2>`;
 	if (champions.length > 0){
 		champions.forEach((card) => {
-			html += `<div class="card ${card.region}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qtde}</span></div>`
+			html += `<div id="${card.cardCode}_${index}" class="card ${card.region}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qtde}</span></div>`
 		});
 	}
 	else
@@ -82,7 +90,7 @@ function viewDeck(deck){
 	html += `<h2>Seguidores</h2>`;
 	if (followers.length > 0){
 		followers.forEach((card) => {
-			html += `<div class="card ${card.region}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qtde}</span></div>`
+			html += `<div id="${card.cardCode}_${index}" class="card ${card.region}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qtde}</span></div>`
 		});
 	}
 	else
@@ -92,7 +100,7 @@ function viewDeck(deck){
 	html += `<h2>Feitiços</h2>`;
 	if (spells.length > 0){
 		spells.forEach((card) => {
-			html += `<div class="card ${card.region}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qtde}</span></div>`
+			html += `<div id="${card.cardCode}_${index}" class="card ${card.region}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qtde}</span></div>`
 		});
 	}
 	else
@@ -102,7 +110,7 @@ function viewDeck(deck){
 	if (landmarks.length > 0){
 		html += `<h2>Monumentos</h2>`;
 		landmarks.forEach((card) => {
-			html += `<div class="card ${card.region}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qtde}</span></div>`
+			html += `<div id="${card.cardCode}_${index}" class="card ${card.region}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qtde}</span></div>`
 		});
 	}
 	html += '</div>';
@@ -110,18 +118,17 @@ function viewDeck(deck){
 	content.insertAdjacentHTML('beforeend', html);
 }
 
-function viewVeredito(decks){
-	const veredito = document.querySelector('#veredito');
+function checkCardlock(decks){
 	let cards = [];
 	let ok = true;
 
 	decks.forEach((deck) => {
 		deck.forEach((card) => {
-			if (cards.indexOf(card.cardCode) !== -1){
+			if (cards.includes(card.cardCode)){
 				ok = false;
 				const repetidas = document.getElementsByName(card.cardCode);
 				repetidas.forEach((repetida) => {
-					repetida.classList.add("repetida");
+					repetida.classList.add('repetida');
 				});
 			} else {
 				cards.push(card.cardCode);
@@ -129,18 +136,104 @@ function viewVeredito(decks){
 		});
 	});
 
-	if (ok)
-	{
-		veredito.classList.add('tudo-certo');
-		veredito.insertAdjacentHTML('beforeend', '<h1>Tudo certo, não há cartas repetidas aqui!</h1>');
-	}
+	return ok;
 }
+
+function checkRegionlock(decks){
+	let regions = [];
+	let ok = true;
+
+	decks.forEach((deck) => {
+		const regions_deck = getRegions(deck);
+		regions_deck.forEach((region) => {
+			if (regions.includes(region)){
+				ok = false;
+				const repetidas = document.getElementsByName(region);
+				repetidas.forEach((repetida) => {
+					repetida.classList.add('repetida');
+				});
+			}else{
+				regions.push(region);
+			}
+		});
+	});
+
+	return ok;
+}
+
+function checkRiotlock(decks){
+	let champions = [];
+	let ok = true;
+
+	decks.forEach((deck) => {
+		const champions_deck = getChampions(deck);
+		champions_deck.forEach((champion) => {
+			if (champions.includes(champion)){
+				ok = false;
+				const repetidas = document.getElementsByName(champion);
+				repetidas.forEach((repetida) => {
+					repetida.classList.add('repetida');
+				});
+			}else{
+				champions.push(champion);
+			}
+		});
+	});
+
+	let regions = [];
+
+	decks.forEach((deck) => {
+		const regions_deck = getRegions(deck);
+		let regions_string = '';
+		regions_deck.sort();
+		regions_deck.forEach((region) => {
+			regions_string += region;
+		});
+		
+		if (regions.includes(regions_string)){
+			ok = false;
+			const repetidas = document.getElementsByName(regions_string);
+			repetidas.forEach((repetida) => {
+				repetida.classList.add('repetida');
+			});
+		} else {
+			regions.push(regions_string);
+		}
+	});
+
+	return ok;
+}
+
+function checkSingleton(decks){
+	let ok = true;
+
+	decks.forEach((deck, index) => {
+		if (deck.length != 40){
+			deck.forEach((card) => {
+				if (card.qtde > 1){
+					ok = false;
+					const repetida = document.getElementById(`${card.cardCode}_${index}`);
+					repetida.classList.add('repetida');
+				}
+			});
+		}
+	});
+
+	return ok;
+}
+
+const regras_function = {
+	'cardlock': checkCardlock,
+	'regionlock': checkRegionlock,
+	'riotlock': checkRiotlock
+};
 
 async function checkDecks(){
 	const veredito = document.querySelector('#veredito');
 	const decks_element = document.querySelector('#decks');
 	const footer = document.querySelector('#footer');
 	let decks = [];
+	let ok = true;
 
 	veredito.classList.remove('tudo-certo');
 	veredito.classList.remove('erro');
@@ -164,12 +257,27 @@ async function checkDecks(){
 
 	footer.style.position = '';
 
-	decks.forEach((deck) => {
-		viewDeck(deck);
+	decks.forEach((deck, index) => {
+		viewDeck(deck, index);
 	});
 	document.querySelector('#conteudo').style.marginBottom = '80px';
 
-	viewVeredito(decks);
+	const regra = document.querySelector('#regra').value;
+	const singleton = document.querySelector('#singleton').checked;
+	ok = regras_function[regra](decks);
+
+	if (singleton){
+		if (ok){
+			ok = checkSingleton(decks);
+		}else{
+			checkSingleton(decks);
+		}
+	}
+
+	if (ok){
+		veredito.classList.add('tudo-certo');
+		veredito.insertAdjacentHTML('beforeend', '<h1>Tudo certo e de acordo com as regras.</h1>');
+	}
 }
 
 document.querySelector('#footer').style.position = 'absolute';

@@ -11,9 +11,25 @@
 	<body>
 		<div id="site">
 			<div id="formulario">
-				<label for="deck1">Deck 1:</label><input type="text" id="deck1" name="deck1"></input>
-				<label for="deck2">Deck 2:</label><input type="text" id="deck2" name="deck2"></input>
-				<label for="deck3">Deck 3:</label><input type="text" id="deck3" name="deck3"></input>
+				<div id="regras">
+					<div>
+						<label for="regra">Regra:</label>
+						<select id="regra" name="regra">
+							<option value="cardlock">Cardlock</option>
+							<option value="regionlock">Regionlock</option>
+							<option value="riotlock">Riotlock</option>
+						</select>
+					</div>
+					<div>
+						<input type="checkbox" id="singleton" name="singleton"/><label for="singleton">Singleton</label>
+					</div>
+				</div>
+				<label for="deck1">Deck 1:</label>
+					<input type="text" id="deck1" name="deck1"></input>
+				<label for="deck2">Deck 2:</label>
+					<input type="text" id="deck2" name="deck2"></input>
+				<label for="deck3">Deck 3:</label>
+					<input type="text" id="deck3" name="deck3"></input>
 				<button id="check_decks" onClick="checkDecks();">Avaliar</button>
 			</div>
 			<div id="conteudo">
@@ -29,10 +45,6 @@
 				<h5>🃏🏆 Acesse <a href="https://escolaruneterra.com.br/" target="_blank">Escola Runeterra</a> para artigos e decks do meta! 🏆🃏</h5>
 			</div>
 		</div>
-		<script src="deckCodeDecoder.js"></script>
-		<script src="./assets/cards.js"></script>
-		<script src="./assets/regions.js"></script>
-		<script src="./assets/champions.js"></script>
 		<script src="script.js"></script>
 	</body>
 </html>
