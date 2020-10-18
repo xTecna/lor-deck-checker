@@ -226,7 +226,7 @@ async function checkDecks(){
 			decks.push(result);
 		}else{
 			veredito.classList.add('erro');
-			veredito.insertAdjacentHTML('beforeend', '<h1 class="error">Um dos códigos passados é inválido.</h1>');
+			veredito.innerHTML = '<h1 class="error">Um dos códigos passados é inválido.</h1>';
 			return;
 		}
 	}
