@@ -236,7 +236,7 @@ async function checkDecks(){
 
 	veredito.classList.remove('tudo-certo');
 	veredito.classList.remove('erro');
-	veredito.innerHTML = '<h1>Carregando...</h1>';
+	veredito.innerHTML = '<h1><i class="fa fa-spinner fa-spin fa-fw"></i> Carregando...</h1>';
 	decks_element.innerHTML = '';
 
 	for (let i = 1; i < 4; ++i){
