@@ -52,8 +52,6 @@ function renderDeckPreview(deck){
 }
 
 function viewDeck(deck, index){
-	const content = document.querySelector('#decks');
-
 	let champions = [];
 	let followers = [];
 	let spells = [];
@@ -113,9 +111,9 @@ function viewDeck(deck, index){
 			html += `<div id="${card.cardCode}_${index}" class="card ${card.region}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qtde}</span></div>`
 		});
 	}
-	html += '</div>';
+	html += '</div></div>';
 
-	content.insertAdjacentHTML('beforeend', html);
+	return html;
 }
 
 function checkCardlock(decks){
@@ -234,10 +232,11 @@ async function checkDecks(){
 	const footer = document.querySelector('#footer');
 	let decks = [];
 	let ok = true;
+	let html = '';
 
 	veredito.classList.remove('tudo-certo');
 	veredito.classList.remove('erro');
-	veredito.innerHTML = '';
+	veredito.innerHTML = '<h1>Carregando...</h1>';
 	decks_element.innerHTML = '';
 
 	for (let i = 1; i < 4; ++i){
@@ -258,8 +257,9 @@ async function checkDecks(){
 	footer.style.position = '';
 
 	decks.forEach((deck, index) => {
-		viewDeck(deck, index);
+		html += viewDeck(deck, index);
 	});
+	decks_element.innerHTML = html;
 	document.querySelector('#conteudo').style.marginBottom = '80px';
 
 	const regra = document.querySelector('#regra').value;
@@ -277,6 +277,8 @@ async function checkDecks(){
 	if (ok){
 		veredito.classList.add('tudo-certo');
 		veredito.insertAdjacentHTML('beforeend', '<h1>Tudo certo e de acordo com as regras.</h1>');
+	} else {
+		veredito.innerHTML = '';
 	}
 }
 
