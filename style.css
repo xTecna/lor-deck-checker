@@ -6,6 +6,11 @@
 	box-sizing: border-box;
 }
 
+html
+{
+	height: 100%;
+}
+
 body
 {
 	width: 100%;
@@ -21,9 +26,6 @@ body
 
 	color: #484646;
 	font-family: 'Roboto', sans-serif;
-
-	display: flex;
-	flex-direction: column;
 }
 
 #formulario
@@ -36,6 +38,7 @@ body
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
+	flex-wrap: wrap;
 }
 
 #regras
@@ -77,6 +80,27 @@ button
 	height: 20px;
 }
 
+#formulario_arquivo
+{
+	width: 100%;
+
+	padding: 1%;
+	color: #ffffff;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+input[type=file]
+{
+	width: 500px;
+	height: 20px;
+
+	margin: 0 5px;
+}
+
 #conteudo
 {
 	width: 100%;
@@ -109,6 +133,7 @@ button
 	display: flex;
 	flex-direction: row;
 	justify-content: space-evenly;
+	flex-wrap: wrap;
 }
 
 .deck

@@ -10,41 +10,49 @@
 	</head>
 	<body>
 		<div id="site">
-			<div id="formulario">
-				<div id="regras">
-					<div>
-						<label for="regra">Regra:</label>
-						<select id="regra" name="regra">
-							<option value="cardlock">Cardlock</option>
-							<option value="regionlock">Regionlock</option>
-							<option value="riotlock">Riotlock</option>
-						</select>
+			<div id="content">
+				<div id="formulario">
+					<div id="regras">
+						<div>
+							<label for="regra">Regra:</label>
+							<select id="regra" name="regra">
+								<option value="cardlock">Cardlock</option>
+								<option value="regionlock">Regionlock</option>
+								<option value="riotlock">Riotlock</option>
+							</select>
+						</div>
+						<div>
+							<input type="checkbox" id="singleton" name="singleton"/>
+							<label for="singleton">Singleton</label>
+						</div>
 					</div>
 					<div>
-						<input type="checkbox" id="singleton" name="singleton"/><label for="singleton">Singleton</label>
+						<label for="deck1">Deck 1:</label>
+						<input type="text" id="deck1" name="deck1"></input>
 					</div>
+					<div>
+						<label for="deck2">Deck 2:</label>
+						<input type="text" id="deck2" name="deck2"></input>
+					</div>
+					<div>
+						<label for="deck3">Deck 3:</label>
+						<input type="text" id="deck3" name="deck3"></input>
+					</div>
+					<button id="check_decks" onClick="checkDecks();">Avaliar</button>
 				</div>
-				<label for="deck1">Deck 1:</label>
-					<input type="text" id="deck1" name="deck1"></input>
-				<label for="deck2">Deck 2:</label>
-					<input type="text" id="deck2" name="deck2"></input>
-				<label for="deck3">Deck 3:</label>
-					<input type="text" id="deck3" name="deck3"></input>
-				<button id="check_decks" onClick="checkDecks();">Avaliar</button>
-			</div>
-			<div id="conteudo">
 				<div id="veredito">
 				</div>
 				<div id="decks">
 				</div>
 			</div>
-			<div id="footer">
+			<footer id="footer">
 				<h5>Feito com ❤️ por xTecna e Alô Renato. Layout desenvolvido por Ismael.</h5>
 				<h5><i class="fa fa-github" aria-hidden="true"></i> <a href="https://github.com/xTecna/lor-deck-checker" target="_blank">GitHub do Projeto</a> (feito em Javascript puro)</h5>
 				<h5>xTecna: <i class="fa fa-github" aria-hidden="true"></i> <a href="https://github.com/xTecna" target="_blank">GitHub</a> <i class="fa fa-twitch" aria-hidden="true"></i> <a href="https://www.twitch.tv/xtecna" target="_blank">Twitch</a> <i class="fa fa-twitter" aria-hidden="true"></i> <a href="https://twitter.com/WNXTecna" target="_blank">Twitter</a> • Ismael: <i class="fa fa-twitter" aria-hidden="true"></i> <a href="https://www.twitter.com/exanimum" target="_blank">Twitter</a> • Alô Renato: <i class="fa fa-github" aria-hidden="true"></i> <a href="https://github.com/renatocesarramos" target="_blank">GitHub</a> <i class="fa fa-twitch" aria-hidden="true"></i> <a href="https://twitch.tv/alorenato" target="_blank">Twitch</a> <i class="fa fa-twitter" aria-hidden="true"></i> <a href="https://twitter.com/_RenatoRamos" target="_blank">Twitter</a></h5>
 				<h5>🃏🏆 Acesse <a href="https://escolaruneterra.com.br/" target="_blank">Escola Runeterra</a> para artigos e decks do meta! 🏆🃏</h5>
-			</div>
+			</footer>
 		</div>
+		<script src="https://unpkg.com/papaparse@5.3.0/papaparse.min.js"></script>
 		<script src="script.js"></script>
 	</body>
 </html>

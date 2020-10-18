@@ -118,106 +118,84 @@ function viewDeck(deck, index){
 
 function checkCardlock(decks){
 	let cards = [];
-	let ok = true;
+	let repetidas = [];
 
 	decks.forEach((deck) => {
 		deck.forEach((card) => {
-			if (cards.includes(card.cardCode)){
-				ok = false;
-				const repetidas = document.getElementsByName(card.cardCode);
-				repetidas.forEach((repetida) => {
-					repetida.classList.add('repetida');
-				});
+			if (cards.includes(card.cardCode) && !repetidas.includes(card.cardCode)){
+				repetidas.push(card.cardCode);
 			} else {
 				cards.push(card.cardCode);
 			}
 		});
 	});
 
-	return ok;
+	return repetidas;
 }
 
 function checkRegionlock(decks){
 	let regions = [];
-	let ok = true;
+	let repetidas = [];
 
 	decks.forEach((deck) => {
 		const regions_deck = getRegions(deck);
 		regions_deck.forEach((region) => {
-			if (regions.includes(region)){
-				ok = false;
-				const repetidas = document.getElementsByName(region);
-				repetidas.forEach((repetida) => {
-					repetida.classList.add('repetida');
-				});
+			if (regions.includes(region) && !repetidas.includes(region)){
+				repetidas.push(region);
 			}else{
 				regions.push(region);
 			}
 		});
 	});
 
-	return ok;
+	return repetidas;
 }
 
 function checkRiotlock(decks){
+	let regions = [];
 	let champions = [];
-	let ok = true;
+	let repetidas = [];
 
 	decks.forEach((deck) => {
 		const champions_deck = getChampions(deck);
 		champions_deck.forEach((champion) => {
-			if (champions.includes(champion)){
-				ok = false;
-				const repetidas = document.getElementsByName(champion);
-				repetidas.forEach((repetida) => {
-					repetida.classList.add('repetida');
-				});
+			if (champions.includes(champion) && !repetidas.includes(champion)){
+				repetidas.push(champion);
 			}else{
 				champions.push(champion);
 			}
 		});
 	});
 
-	let regions = [];
-
 	decks.forEach((deck) => {
 		const regions_deck = getRegions(deck);
-		let regions_string = '';
 		regions_deck.sort();
-		regions_deck.forEach((region) => {
-			regions_string += region;
-		});
+		const regions_string = regions_deck.join('');
 		
-		if (regions.includes(regions_string)){
-			ok = false;
-			const repetidas = document.getElementsByName(regions_string);
-			repetidas.forEach((repetida) => {
-				repetida.classList.add('repetida');
-			});
+		if (regions.includes(regions_string) && !repetidas.includes(regions_string)){
+			repetidas.push(regions_string);
 		} else {
 			regions.push(regions_string);
 		}
 	});
 
-	return ok;
+	return repetidas;
 }
 
 function checkSingleton(decks){
-	let ok = true;
+	let repetidas = [];
 
 	decks.forEach((deck, index) => {
 		if (deck.length != 40){
 			deck.forEach((card) => {
 				if (card.qtde > 1){
-					ok = false;
-					const repetida = document.getElementById(`${card.cardCode}_${index}`);
-					repetida.classList.add('repetida');
+					repetidas.push(`${card.cardCode}_${index}`);
 				}
 			});
 		}
 	});
 
-	return ok;
+	return repetidas;
 }
 
 const regras_function = {
@@ -231,7 +209,6 @@ async function checkDecks(){
 	const decks_element = document.querySelector('#decks');
 	const footer = document.querySelector('#footer');
 	let decks = [];
-	let ok = true;
 	let html = '';
 
 	veredito.classList.remove('tudo-certo');
@@ -241,6 +218,7 @@ async function checkDecks(){
 
 	for (let i = 1; i < 4; ++i){
 		const code = document.querySelector(`#deck${i}`).value;
+		if (code === '')	continue;
 		const response = await fetch(`https://leaderboardescola.herokuapp.com/deck/decode?deck=${code}`);
 
 		if (response.ok){
@@ -249,7 +227,6 @@ async function checkDecks(){
 		}else{
 			veredito.classList.add('erro');
 			veredito.insertAdjacentHTML('beforeend', '<h1 class="error">Um dos códigos passados é inválido.</h1>');
-			footer.style.position = 'absolute';
 			return;
 		}
 	}
@@ -260,23 +237,26 @@ async function checkDecks(){
 		html += viewDeck(deck, index);
 	});
 	decks_element.innerHTML = html;
-	document.querySelector('#conteudo').style.marginBottom = '80px';
-
+	document.querySelector('#content').style.marginBottom = '80px';
+	
 	const regra = document.querySelector('#regra').value;
 	const singleton = document.querySelector('#singleton').checked;
-	ok = regras_function[regra](decks);
+	const repetidas = regras_function[regra](decks);
 
 	if (singleton){
-		if (ok){
-			ok = checkSingleton(decks);
-		}else{
-			checkSingleton(decks);
-		}
+		repetidas.push.apply(repetidas, checkSingleton(decks));
 	}
 
-	if (ok){
+	repetidas.forEach((repetida) => {
+		const elements = document.getElementsByName(repetida);
+		elements.forEach((element) => {
+			element.classList.add('repetida');
+		});
+	});
+
+	if (repetidas.length == 0){
 		veredito.classList.add('tudo-certo');
-		veredito.insertAdjacentHTML('beforeend', '<h1>Tudo certo e de acordo com as regras.</h1>');
+		veredito.innerHTML = '<h1>Tudo certo e de acordo com as regras.</h1>';
 	} else {
 		veredito.innerHTML = '';
 	}
