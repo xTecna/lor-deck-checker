@@ -215,8 +215,6 @@ async function checkDecks(){
 		}
 	}
 
-	console.log(decks);
-
 	footer.style.position = '';
 
 	decks.forEach((deck, index) => {
