@@ -17,7 +17,6 @@ function checkLocale(locale){
 	if (locale.includes('-')){
 		locale = locale.split('-')[0];
 	}
-	console.log(locale);
 	for (let i = 0; i < availableLanguages.length; ++i){
 		if (availableLanguages[i].startsWith(locale)){
 			return availableLanguages[i];
@@ -201,11 +200,7 @@ async function checkDecks(){
 	for (let i = 1; i < 4; ++i){
 		const code = document.querySelector(`#deck${i}`).value;
 		if (code === '')	continue;
-		const response = await fetch(`https://escolaruneterra.herokuapp.com/deck/decode?deck=${code}&locale=${locale}`, {
-			method: 'GET',
-			mode: 'no-cors',
-			cache: 'default'
-		});
+		const response = await fetch(`https://escolaruneterra.herokuapp.com/deck/decode?deck=${code}&locale=${locale}`);
 
 		if (response.ok){
 			const result = await response.json();
