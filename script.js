@@ -215,7 +215,7 @@ async function checkDecks(){
 		}
 	}
 
-	footer.style.position = '';
+	// footer.style.position = '';
 
 	decks.forEach((deck, index) => {
 		html += viewDeck(deck, index);
@@ -245,6 +245,3 @@ async function checkDecks(){
 		veredito.innerHTML = '';
 	}
 }
-
-document.querySelector('#footer').style.position = 'absolute';
-document.querySelector('#footer').style.bottom = 0;
