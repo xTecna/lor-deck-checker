@@ -1,110 +1,135 @@
-*
-{
+html, body {
 	padding: 0;
 	margin: 0;
-	border: 0;
 	box-sizing: border-box;
-}
 
-html
-{
-	height: 100%;
-}
-
-body
-{
-	width: 100%;
-	height: 100%;
-	
 	background-color: #1A1A1A;
+
+	font-family: 'Roboto', sans-serif;
 }
 
-#site
-{
+h1 {
+	text-align: center;
+	color: teal;
+}
+
+#content {
+	grid-area: content;
+}
+
+#formulario {
+	grid-area: header;
+}
+
+footer {
+	grid-area: footer;
+}
+
+#site {
 	width: 100%;
 	height: 100%;
 
-	color: #484646;
-	font-family: 'Roboto', sans-serif;
+	margin-top: 20px;
+
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: 1fr 6fr 1fr;
+
+	grid-template-areas: 
+	"header"
+	"content"
+	"footer";
 }
 
 #formulario
 {
 	width: 100%;
-
-	padding: 1%;
 	color: #ffffff;
 
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	flex-wrap: wrap;
-}
-
-#regras
-{
 	display: flex;
 	flex-direction: column;
-	justify-content: flex-start;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+
 }
 
-select
-{
-	width: 100px;
-	height: 20px;
-
-	margin: 0 5px;
-}
-
-input[type=text]
-{
-	width: 200px;
-	height: 20px;
-
-	margin: 0 5px;
-}
-
-input[type=checkbox]
-{
-	margin: 0 5px;
-}
-
-label
-{
-	margin: 0 1px;
-}
-
-button
-{
-	width: 100px;
-	height: 20px;
-}
-
-#formulario_arquivo
-{
-	width: 100%;
-
-	padding: 1%;
-	color: #ffffff;
-
+#formulario > .row {
 	display: flex;
 	flex-direction: row;
-	justify-content: center;
-	flex-wrap: wrap;
 }
 
-input[type=file]
-{
-	width: 500px;
-	height: 20px;
+#formulario input {
+	border-radius: 10px;
+	padding: 5px 10px;
 
-	margin: 0 5px;
+
+	border: 0;
+	outline: 0;
+
+	font-style: italic;
+	margin-top: 5px;
+
+	transition: 0.5s;
+
 }
 
-#conteudo
-{
-	width: 100%;
+#formulario label {
+	margin-left: 20px;
 }
+
+#formulario input:hover{
+	background-color: #353535;
+	color: white;
+}
+
+#check_decks {
+	margin-top: 20px;
+	background-color: transparent;
+	border: 1px solid darkcyan;
+	color: white;
+
+	transition: 0.5s;
+	cursor: pointer;
+
+	font-size: 1.1rem;
+}
+
+#check_decks:hover{
+	background-color: darkcyan;
+}
+
+#regras {
+
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-start;
+
+	border: 1px solid darkcyan;
+	height: 30px;
+	padding: 5px 0;
+
+}
+
+#regras input[type=checkbox]{
+	margin: 5px 10px 0 5px;
+}
+
+#regra {
+	margin-left: 10px;
+	margin-top: 2px;
+}
+
+
+#check_decks {
+	border-radius: 30px;
+	width: 300px;
+	height: 50px;
+}
+
+
+/* -------------  Content ----------------------------- */
+
 
 #veredito
 {
@@ -208,6 +233,10 @@ input[type=file]
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: center;
+}
+
+.deck-completo h2 {
+	color: #fff;
 }
 
 .card
@@ -320,21 +349,63 @@ input[type=file]
 	align-items: center;
 }
 
-#footer
-{
-	width: 100%;
-	height: 80px;
+/* -------------  Footer ----------------------------- */
 
-	color: #000000;
-	background-color: #484646;
+footer {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 
-	padding: 5px;
-
-	position: fixed;
-	bottom: 0;
+	color: rgb(207, 207, 207);
 }
 
-#footer a
-{
-	color: #000000;
+footer > h5 {
+	margin: 0;
+}
+
+footer a {
+	text-decoration: none;
+	color: rgb(123, 80, 224);
+
+	transition: 0.5s;
+}
+
+footer a:hover{
+	color: teal;
+}
+
+
+@media(max-width:360px){
+
+	#site {
+		width: 100%;
+		height: 100%;
+	
+		margin-top: 20px;
+	
+		display: grid;
+		grid-template-columns: 1fr;
+		grid-template-rows: 10% 1fr 0.02fr;
+	
+		grid-template-areas: 
+		"header"
+		"content"
+		"footer";
+	}
+
+	#formulario > .row {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.card
+	{
+		width: 90%;
+	}
+
+	#decks {
+		margin-top: 20px;
+	}
+
 }
