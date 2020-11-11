@@ -14,8 +14,18 @@ function getGameLanguage(){
 }
 
 function checkLocale(locale){
+	locale = locale.toLowerCase();
 	if (locale.includes('-')){
-		locale = locale.split('-')[0];
+		locale = locale.replace('-', '_');
+	}
+	for (let i = 0; i < availableLanguages.length; ++i){
+		if (availableLanguages[i] === locale){
+			console.log(availableLanguages[i]);
+			return availableLanguages[i];
+		}
+	}
+	if (locale.includes('-') || locale.includes('_')){
+		locale = locale.split('-')[0].split('_')[0];
 	}
 	for (let i = 0; i < availableLanguages.length; ++i){
 		if (availableLanguages[i].startsWith(locale)){
