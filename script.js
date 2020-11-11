@@ -1,4 +1,4 @@
-const availableLanguages = [ 'de_de', 'en_us', 'es_es', 'es_mx', 'fr_fr', 'it_it', 'ja_jp', 'ko_kr', 'pl_pl', 'pt_br', 'th_th', 'tr_tr', 'ru_ru', 'zh_tw' ];
+const availableLanguages = [ 'de_de', 'en_us', 'es_mx', 'es_es', 'fr_fr', 'it_it', 'ja_jp', 'ko_kr', 'pl_pl', 'pt_br', 'th_th', 'tr_tr', 'ru_ru', 'zh_tw' ];
 let locale = getGameLanguage();
 
 function getGameLanguage(){
