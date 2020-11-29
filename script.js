@@ -1,5 +1,10 @@
 const availableLanguages = [ 'de_de', 'en_us', 'es_mx', 'es_es', 'fr_fr', 'it_it', 'ja_jp', 'ko_kr', 'pl_pl', 'pt_br', 'th_th', 'tr_tr', 'ru_ru', 'zh_tw' ];
 let locale = getGameLanguage();
+const parameters = urlParameters();
+if (parameters){
+	console.log(parameters);
+	checkDecks(parameters.regra, parameters.singleton, parameters.decks);
+}
 
 function getGameLanguage(){
 	let locale = navigator.language || navigator.userLanguage;
@@ -33,6 +38,23 @@ function checkLocale(locale){
 		}
 	}
 	return null;
+}
+
+function urlParameters(){
+	const queryString = window.location.search;
+	const urlParams = new URLSearchParams(queryString);
+
+	if (urlParams.has('regra') &&
+		urlParams.has('singleton') &&
+		urlParams.has('deck1') && urlParams.has('deck2') && urlParams.has('deck3')){
+		return {
+			regra: urlParams.get('regra'),
+			singleton: urlParams.get('singleton'),
+			decks: [urlParams.get('deck1'), urlParams.get('deck2'), urlParams.get('deck3')]
+		};
+	}else{
+		return null;
+	}
 }
 
 function renderDeckPreview(deck){
@@ -195,11 +217,23 @@ const regras_function = {
 	'riotlock': checkRiotlock
 };
 
-async function checkDecks(){
+async function checkDecks(r, s, d){
+	let regra, singleton, decks = [];
+
+	if (!r || !s || !d){
+		regra = document.querySelector('#regra').value;
+		singleton = document.querySelector('#singleton').checked;
+		for (let i = 0; i < 3; ++i){
+			decks[i] = document.querySelector(`#deck${i + 1}`).value;
+		}
+	}else{
+		regra = r;
+		singleton = s;
+		decks = d;
+	}
+
 	const veredito = document.querySelector('#veredito');
 	const decks_element = document.querySelector('#decks');
-	const footer = document.querySelector('#footer');
-	let decks = [];
 	let html = '';
 
 	veredito.classList.remove('tudo-certo');
@@ -207,14 +241,14 @@ async function checkDecks(){
 	veredito.innerHTML = '<h1><i class="fa fa-spinner fa-spin fa-fw"></i> Loading...</h1>';
 	decks_element.innerHTML = '';
 
-	for (let i = 1; i < 4; ++i){
-		const code = document.querySelector(`#deck${i}`).value;
+	for (let i = 0; i < 3; ++i){
+		const code = decks[i];
 		if (code === '')	continue;
 		const response = await fetch(`https://escolaruneterra.herokuapp.com/deck/decode?deck=${code}&locale=${locale}`);
 
 		if (response.ok){
 			const result = await response.json();
-			decks.push(result);
+			decks[i] = result;
 		}else{
 			veredito.classList.add('erro');
 			veredito.innerHTML = '<h1 class="error">There is an invalid code.</h1>';
@@ -222,16 +256,12 @@ async function checkDecks(){
 		}
 	}
 
-	// footer.style.position = '';
-
 	decks.forEach((deck, index) => {
 		html += viewDeck(deck, index);
 	});
 	decks_element.innerHTML = html;
 	document.querySelector('#content').style.marginBottom = '80px';
 	
-	const regra = document.querySelector('#regra').value;
-	const singleton = document.querySelector('#singleton').checked;
 	const repetidas = regras_function[regra](decks);
 
 	if (singleton){
