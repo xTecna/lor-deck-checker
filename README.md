@@ -7,5 +7,5 @@
 </p>
 
 <p>
-  Thank you, <strong><a href="https://github.com/renatocesarramos">AloRenato</a></strong> for your enourmous help with the reponsiveness and layout! You're the man!
+  Thank you, <strong><a href="https://github.com/renatocesarramos">AloRenato</a></strong>, for your enourmous help with the reponsiveness and layout! You're the man!
 </p>
