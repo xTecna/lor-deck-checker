@@ -2,7 +2,6 @@ const availableLanguages = [ 'de_de', 'en_us', 'es_mx', 'es_es', 'fr_fr', 'it_it
 let locale = getGameLanguage();
 const parameters = urlParameters();
 if (parameters){
-	console.log(parameters);
 	checkDecks(parameters.regra, parameters.singleton, parameters.decks);
 }
 
@@ -25,7 +24,6 @@ function checkLocale(locale){
 	}
 	for (let i = 0; i < availableLanguages.length; ++i){
 		if (availableLanguages[i] === locale){
-			console.log(availableLanguages[i]);
 			return availableLanguages[i];
 		}
 	}
@@ -195,6 +193,28 @@ function checkRiotlock(decks){
 	return repetidas;
 }
 
+function checkCollectionlock(decks){
+	let repetidas = [];
+	let counting = {};
+
+	decks.forEach((deck) => {
+		deck.cards.forEach((card) => {
+			if (counting[card.cardCode]){
+				counting[card.cardCode] += card.qty;
+			} else {
+				counting[card.cardCode] = card.qty;
+			}
+			if (counting[card.cardCode] > 3){
+				if (!repetidas.includes(card.cardCode)){
+					repetidas.push(card.cardCode);
+				}
+			}
+		});
+	});
+
+	return repetidas;
+}
+
 function checkSingleton(decks){
 	let repetidas = [];
 
@@ -214,7 +234,8 @@ function checkSingleton(decks){
 const regras_function = {
 	'cardlock': checkCardlock,
 	'regionlock': checkRegionlock,
-	'riotlock': checkRiotlock
+	'riotlock': checkRiotlock,
+	'collectionlock': checkCollectionlock
 };
 
 async function checkDecks(r, s, d){
