@@ -1,20 +1,31 @@
-const availableLanguages = [ 'de_de', 'en_us', 'es_mx', 'es_es', 'fr_fr', 'it_it', 'ja_jp', 'ko_kr', 'pl_pl', 'pt_br', 'th_th', 'tr_tr', 'ru_ru', 'zh_tw' ];
+const availableLanguages = [ 'de_de', 'en_us', 'es_mx', 'es_es', 'fr_fr', 'it_it', 'ja_jp', 'ko_kr', 'pl_pl', 'pt_br', 'th_th', 'tr_tr', 'ru_ru', 'zh_tw', 'vi_vn' ];
 let locale = getGameLanguage();
+setGameLanguage(locale);
 const parameters = urlParameters();
 if (parameters){
 	checkDecks(parameters.regra, parameters.singleton, parameters.decks);
 }
 
 function getGameLanguage(){
-	let locale = navigator.language || navigator.userLanguage;
-	if (!locale) return;
+	const savedLocale = localStorage.getItem('locale');
+	let checkedLocale;
 
-	locale = checkLocale(locale);
-	if (!locale){
-		locale = 'en_us';
+	if (savedLocale) {
+		checkedLocale = checkLocale(savedLocale);
+		if (checkedLocale){
+			return checkedLocale;
+		}
+	}
+
+	let newLocale = navigator.language || navigator.userLanguage;
+	if (!newLocale) return;
+
+	checkedLocale = checkLocale(newLocale);
+	if (!checkedLocale){
+		newLocale = 'en_us';
 	}
 	
-	return locale;
+	return checkedLocale;
 }
 
 function checkLocale(locale){
@@ -36,6 +47,23 @@ function checkLocale(locale){
 		}
 	}
 	return null;
+}
+
+function setGameLanguage(locale){
+	const languageElement = document.getElementById('idioma');
+	languageElement.value = locale;
+
+	localStorage.setItem('locale', locale);
+}
+
+function changeLanguage(newLocale){
+	const checkedLocale = checkLocale(newLocale);
+	if (!checkedLocale){
+		return;
+	}
+
+	locale = checkedLocale;
+	setGameLanguage(checkedLocale);
 }
 
 function urlParameters(){
