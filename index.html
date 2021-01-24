@@ -36,19 +36,26 @@
 
 			<div class="row">
 				<div id="regras">
-					<div>
-						<label for="regra">Rule:</label>
-						<select id="regra" name="regra">
-							<option value="cardlock">Cardlock</option>
-							<option value="regionlock">Regionlock</option>
-							<option value="riotlock">Riotlock</option>
-							<option value="collectionlock">Collectionlock</option>
-						</select>
-	
-						<label for="singleton">Singleton: </label>
-						<input type="checkbox" id="singleton" name="singleton"/>
-						
+					<div class="tooltip" onClick="toggleDescription();"><i class="fa fa-question-circle botao-descricao" aria-hidden="true"></i>
+						<span id="tooltiptext" class="tooltiptext">
+							<ul>
+								<li><strong>Cardlock:</strong> every deck must have different cards from each other.</li>
+								<li><strong>Regionlock:</strong> every deck must have different regions from each other.</li>
+								<li><strong>Riotlock:</strong> every deck must have different champions and different combination of regions from each other. Also, it is only allowed at most one deck without champions.</li>
+								<li><strong>Collectionlock:</strong> the amount of a card among the decks must be at most 3 (three).</li>
+							</ul>
+						</span>
 					</div>
+					<label for="regra">Rule:</label>
+					<select id="regra" name="regra">
+						<option value="cardlock">Cardlock</option>
+						<option value="regionlock">Regionlock</option>
+						<option value="riotlock">Riotlock</option>
+						<option value="collectionlock">Collectionlock</option>
+					</select>
+
+					<label for="singleton">Singleton: </label>
+					<input type="checkbox" id="singleton" name="singleton"/>
 				</div>
 
 				<div id="decks_input">

@@ -7,6 +7,10 @@ if (parameters){
 	checkDecks(parameters.regra, parameters.singleton, parameters.decks);
 }
 
+function toggleDescription(){
+	document.getElementById('tooltiptext').classList.toggle('not-hidden');
+}
+
 function getGameLanguage(){
 	const savedLocale = localStorage.getItem('locale');
 	let checkedLocale;

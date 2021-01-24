@@ -133,11 +133,33 @@ footer {
 
 	border: 1px solid darkcyan;
 	height: 30px;
-	padding: 5px 0;
+	padding: 5px;
 }
 
 #regras input[type=checkbox]{
 	margin: 5px 10px 0 5px;
+}
+
+.tooltip {
+	position: relative;
+	display: inline-block;
+	border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+	visibility: hidden;
+	width: 750px;
+	background-color: black;
+	color: #fff;
+	border-radius: 6px;
+
+	/* Position the tooltip */
+	position: absolute;
+	z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+	visibility: visible;
 }
 
 #check_decks {
