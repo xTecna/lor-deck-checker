@@ -36,7 +36,7 @@
 
 			<div class="row">
 				<div id="regras">
-	
+					<div>
 						<label for="regra">Rule:</label>
 						<select id="regra" name="regra">
 							<option value="cardlock">Cardlock</option>
@@ -47,25 +47,33 @@
 	
 						<label for="singleton">Singleton: </label>
 						<input type="checkbox" id="singleton" name="singleton"/>
+						
+					</div>
 				</div>
-	
-				<div>
-					<label for="deck1">Deck 1:</label>
-					<input type="text" id="deck1" name="deck1"></input>
+
+				<div id="decks_input">
+					<div>
+						<input type="text" id="deck1" name="deck1" placeholder="Deck Code 1"></input>
+					</div>
+					<div>
+						<input type="text" id="deck2" name="deck2" placeholder="Deck Code 2"></input>
+					</div>
+					<div>
+						<input type="text" id="deck3" name="deck3" placeholder="Deck Code 3"></input>
+					</div>
 				</div>
-	
-				<div>
-					<label for="deck2">Deck 2:</label>
-					<input type="text" id="deck2" name="deck2"></input>
-				</div>
-	
-				<div>
-					<label for="deck3">Deck 3:</label>
-					<input type="text" id="deck3" name="deck3"></input>
+
+				<div id="decks_buttons">
+					<div>
+						<button class="button" onClick="addDeckForm();">+</button>
+					</div>
+					<div>
+						<button class="button" onClick="removeDeckForm();">-</button>
+					</div>
 				</div>
 			</div>
 
-			<button id="check_decks" onClick="checkDecks();">Check</button>
+			<button id="check_decks" class="button" onClick="checkDecks();">Check</button>
 		</header>
 		
 		

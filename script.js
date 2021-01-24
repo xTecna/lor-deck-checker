@@ -1,5 +1,6 @@
 const availableLanguages = [ 'de_de', 'en_us', 'es_mx', 'es_es', 'fr_fr', 'it_it', 'ja_jp', 'ko_kr', 'pl_pl', 'pt_br', 'th_th', 'tr_tr', 'ru_ru', 'zh_tw', 'vi_vn' ];
 let locale = getGameLanguage();
+let numDecks = 3;
 setGameLanguage(locale);
 const parameters = urlParameters();
 if (parameters){
@@ -71,15 +72,38 @@ function urlParameters(){
 	const urlParams = new URLSearchParams(queryString);
 
 	if (urlParams.has('regra') &&
-		urlParams.has('singleton') &&
-		urlParams.has('deck1') && urlParams.has('deck2') && urlParams.has('deck3')){
+		urlParams.has('singleton')){
+		let i = 1;
+		let decks = [];
+		while (urlParams.has(`deck${i}`)){
+			decks.push(urlParams.get(`deck${i}`));
+			i += 1;
+		}
+
 		return {
 			regra: urlParams.get('regra'),
 			singleton: urlParams.get('singleton'),
-			decks: [urlParams.get('deck1'), urlParams.get('deck2'), urlParams.get('deck3')]
+			decks: decks
 		};
 	}else{
 		return null;
+	}
+}
+
+function addDeckForm(){
+	const decksElement = document.getElementById('decks_input');
+	numDecks += 1;
+	const newDeckChild = document.createElement('div');
+	newDeckChild.innerHTML = `<input type="text" id="deck${numDecks}" name="deck${numDecks}" placeholder="Deck Code ${numDecks}"></input>`;
+	decksElement.appendChild(newDeckChild);
+}
+
+function removeDeckForm(){
+	if (numDecks > 0){
+		const deckElement = document.getElementById(`deck${numDecks}`);
+		numDecks -= 1;
+		const parentElement = deckElement.parentElement;
+		parentElement.remove();
 	}
 }
 
@@ -272,8 +296,8 @@ async function checkDecks(r, s, d){
 	if (!r || !s || !d){
 		regra = document.querySelector('#regra').value;
 		singleton = document.querySelector('#singleton').checked;
-		for (let i = 0; i < 3; ++i){
-			decks[i] = document.querySelector(`#deck${i + 1}`).value;
+		for (let i = 1; i <= numDecks; ++i){
+			decks.push(document.querySelector(`#deck${i}`).value);
 		}
 	}else{
 		regra = r;
@@ -290,9 +314,14 @@ async function checkDecks(r, s, d){
 	veredito.innerHTML = '<h1><i class="fa fa-spinner fa-spin fa-fw"></i> Loading...</h1>';
 	decks_element.innerHTML = '';
 
-	for (let i = 0; i < 3; ++i){
+	if (decks.some((item) => item === '')){
+		veredito.classList.add('erro');
+		veredito.innerHTML = '<h1 class="error">There is an empty field.</h1>';
+		return;
+	}
+
+	for (let i = 0; i < numDecks; ++i){
 		const code = decks[i];
-		if (code === '')	continue;
 		const response = await fetch(`https://escolaruneterra.herokuapp.com/deck/decode?deck=${code}&locale=${locale}`);
 
 		if (response.ok){
