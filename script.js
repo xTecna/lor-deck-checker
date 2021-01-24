@@ -127,11 +127,31 @@ function renderDeckPreview(deck){
 	return html;
 }
 
+function compare(a, b){
+	if (a.mana == b.mana){
+		if (a.name < b.name){
+			return -1;
+		}else if (a.name == b.name){
+			return 0;
+		}else{
+			return 1;
+		}
+	}else{
+		if (a.mana < b.mana){
+			return -1;
+		}else{
+			return 1;
+		}
+	}
+}
+
 function viewDeck(deck, index){
 	let champions = [];
 	let followers = [];
 	let spells = [];
 	let landmarks = [];
+
+	deck.cards.sort(compare);
 
 	deck.cards.forEach((card) => {
 		if (card.type == 'champion'){
