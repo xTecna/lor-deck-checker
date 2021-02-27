@@ -111,14 +111,21 @@ function removeDeckForm(){
 	}
 }
 
+function getRegionsString(regions){
+	return regions.sort().join('');
+}
+
 function renderDeckPreview(deck){
-	let regions_string = deck.regions.join('');
+	let regions_string = getRegionsString(deck.regions);
 	
 	let html = `<div class="resumo-deck"><div class="regioes" name="${regions_string}">`;
 	deck.regions.forEach(region => {
 		html += `<div class="regiao" name="${region}" style="background-image: url('http://dd.b.pvp.net/latest/core/en_us/img/regions/icon-${region}.png');"></div>`;
 	})
 	html += '</div><div class="campeoes">';
+	if (deck.champions.length == 0){
+		html += `<div class="campeao" name="sem-campeao"></div>`;
+	}
 	deck.champions.forEach(champion => {
 		html += `<div class="campeao" name="${champion}" style="background-image: url('http://ddragon.leagueoflegends.com/cdn/10.15.1/img/champion/${champion}.png');"></div>`;
 	})
@@ -145,6 +152,17 @@ function compare(a, b){
 	}
 }
 
+function renderSession(cards, index, title){
+	let html = `<h2 class="session-title"><span>${title}</span><span>${cards.length}</span></h2>`;
+	if (cards.length > 0){
+		cards.forEach((card) => {
+			html += `<div id="${card.cardCode}_${index}" class="card ${card.region}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qty}</span></div>`
+		});
+	}
+
+	return html;
+}
+
 function viewDeck(deck, index){
 	let champions = [];
 	let followers = [];
@@ -165,43 +183,13 @@ function viewDeck(deck, index){
 		}
 	});
 
-	let html = `<div class="deck">${renderDeckPreview(deck)}`;
-	html += `<div class="deck-completo"><h2>Champions</h2>`;
-	if (champions.length > 0){
-		champions.forEach((card) => {
-			html += `<div id="${card.cardCode}_${index}" class="card ${card.region}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qty}</span></div>`
-		});
-	}
-	else
-	{
-		html += '<h3>No champions.</h3>';
-	}
-	html += `<h2>Followers</h2>`;
-	if (followers.length > 0){
-		followers.forEach((card) => {
-			html += `<div id="${card.cardCode}_${index}" class="card ${card.region}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qty}</span></div>`
-		});
-	}
-	else
-	{
-		html += '<h3>No followers.</h3>';
-	}
-	html += `<h2>Spells</h2>`;
-	if (spells.length > 0){
-		spells.forEach((card) => {
-			html += `<div id="${card.cardCode}_${index}" class="card ${card.region}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qty}</span></div>`
-		});
-	}
-	else
-	{
-		html += '<h3>No spells.</h3>';
-	}
-	if (landmarks.length > 0){
-		html += `<h2>Landmarks</h2>`;
-		landmarks.forEach((card) => {
-			html += `<div id="${card.cardCode}_${index}" class="card ${card.region}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qty}</span></div>`
-		});
-	}
+	let html = '<div class="deck">';
+	html += renderDeckPreview(deck);
+	html += '<div class="deck-completo">';
+	html += renderSession(champions, index, 'Champions');
+	html += renderSession(followers, index, 'Followers');
+	html += renderSession(spells, index, 'Spells');
+	html += renderSession(landmarks, index, 'Landmarks');
 	html += '</div></div>';
 
 	return html;
@@ -247,6 +235,14 @@ function checkRiotlock(decks){
 	let repetidas = [];
 
 	decks.forEach((deck) => {
+		if (deck.champions.length == 0){
+			if (champions.includes('sem-campeao') && !repetidas.includes('sem-campeao')){
+				repetidas.push('sem-campeao');
+			}else{
+				champions.push('sem-campeao');
+			}
+		}
+
 		deck.champions.forEach((champion) => {
 			if (champions.includes(champion) && !repetidas.includes(champion)){
 				repetidas.push(champion);
@@ -257,7 +253,7 @@ function checkRiotlock(decks){
 	});
 
 	decks.forEach((deck) => {
-		const regions_string = deck.regions.join('');
+		const regions_string = getRegionsString(deck.regions);
 		
 		if (regions.includes(regions_string) && !repetidas.includes(regions_string)){
 			repetidas.push(regions_string);
