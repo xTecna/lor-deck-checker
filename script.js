@@ -120,7 +120,7 @@ function renderDeckPreview(deck){
 	
 	let html = `<div class="resumo-deck"><div class="regioes" name="${regions_string}">`;
 	deck.regions.forEach(region => {
-		html += `<div class="regiao" name="${region}" style="background-image: url('http://dd.b.pvp.net/latest/core/en_us/img/regions/icon-${region}.png');"></div>`;
+		html += `<div class="regiao" name="${region}" style="background-image: url(${region === 'shurima' ? 'http://escolaruneterra.com.br/gallerycard/assets/icon-shurima.png' : `http://dd.b.pvp.net/latest/core/en_us/img/regions/icon-${region}.png`});"></div>`;
 	})
 	html += '</div><div class="campeoes">';
 	if (deck.champions.length == 0){

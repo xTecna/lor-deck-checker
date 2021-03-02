@@ -342,6 +342,11 @@ footer {
 	background: linear-gradient(90deg, #3c26da 0%, #00000000 100%);
 }
 
+.shurima
+{
+	background: linear-gradient(90deg, #b19155 0%, #00000000 100%);
+}
+
 .repetida
 {
 	border: #ff0000 5px solid;
