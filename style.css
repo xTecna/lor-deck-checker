@@ -6,6 +6,10 @@ html, body {
 	background-color: #1A1A1A;
 
 	font-family: 'Roboto', sans-serif;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
 h1 {
@@ -83,6 +87,11 @@ footer {
 #formulario input:hover{
 	background-color: #353535;
 	color: white;
+}
+
+#one_player_decks {
+	display: flex;
+	flex-direction: row;
 }
 
 #decks_input {

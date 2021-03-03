@@ -341,13 +341,22 @@ async function checkDecks(r, s, d){
 	}
 
 	for (let i = 0; i < numDecks; ++i){
-		const code = decks[i];
-		const response = await fetch(`https://escolaruneterra.herokuapp.com/deck/decode?deck=${code}&locale=${locale}`);
+		try
+		{
+			const code = decks[i];
+			const response = await fetch(`https://escolaruneterra.herokuapp.com/deck/decode?deck=${code}&locale=${locale}`);
 
-		if (response.ok){
-			const result = await response.json();
-			decks[i] = result;
-		}else{
+			if (response.ok){
+				const result = await response.json();
+				decks[i] = result;
+			}else{
+				veredito.classList.add('erro');
+				veredito.innerHTML = '<h1 class="error">There is an invalid code.</h1>';
+				return;
+			}
+		}
+		catch (error)
+		{
 			veredito.classList.add('erro');
 			veredito.innerHTML = '<h1 class="error">There is an invalid code.</h1>';
 			return;
