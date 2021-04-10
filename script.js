@@ -22,6 +22,40 @@ const parameters = urlParameters();
 if (parameters) {
   checkDecks(parameters.regra, parameters.singleton, parameters.decks);
 }
+const regionNames = {
+  demacia: "Demacia",
+  freljord: "Freljord",
+  ionia: "Ionia",
+  noxus: "Noxus",
+  piltoverzaun: "Piltover & Zaun",
+  shadowisles: "Shadow Isles",
+  bilgewater: "Bilgewater",
+  targon: "Mt Targon",
+  shurima: "Shurima",
+};
+const championNames = {
+  JarvanIV: "Jarvan IV",
+  MissFortune: "Miss Fortune",
+  TahmKench: "Tahm Kench",
+  TwistedFate: "Twisted Fate",
+  AurelionSol: "Aurelion Sol",
+};
+
+function getRegionName(region) {
+  return regionNames[region];
+}
+
+function getChampionName(champion) {
+  if (championNames[champion]) {
+    return championNames[champion];
+  } else {
+    return champion;
+  }
+}
+
+function getRegionsName(regions) {
+  return regions.map((region) => getRegionName(region)).join(" & ");
+}
 
 function toggleDescription() {
   document.getElementById("tooltiptext").classList.toggle("not-hidden");
@@ -324,12 +358,68 @@ function checkSingleton(decks) {
   return repetidas;
 }
 
-const regras_function = {
-  cardlock: checkCardlock,
-  regionlock: checkRegionlock,
-  riotlock: checkRiotlock,
-  collectionlock: checkCollectionlock,
-};
+function renderLoading(loading, number = -1) {
+  const veredito = document.querySelector("#veredito");
+
+  if (loading) {
+    veredito.classList.remove(...veredito.classList);
+    veredito.innerHTML = `<h1><i class="fa fa-spinner fa-spin fa-fw"></i> Loading...${
+      number > -1 ? ` (${(number * 100).toFixed(2)}%)` : ""
+    }</h1>`;
+  } else {
+    veredito.innerHTML = "";
+  }
+}
+
+function renderVerdict(className, message) {
+  const veredito = document.querySelector("#veredito");
+
+  veredito.classList.remove(...veredito.classList);
+  veredito.classList.add(className);
+  veredito.innerHTML = `<h1>${message}</h1>`;
+}
+
+function renderDecks(html) {
+  const decks_element = document.querySelector("#decks");
+
+  decks_element.innerHTML = html;
+  document.querySelector("#content").style.marginBottom = "80px";
+}
+
+async function convertDeck(code, locale) {
+  try {
+    if (code === "") return null;
+
+    const response = await fetch(
+      `https://escolaruneterra.herokuapp.com/deck/decode?deck=${code}&locale=${locale}`
+    );
+
+    if (response.ok) {
+      const result = await response.json();
+      return result;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    return null;
+  }
+}
+
+function checkRules(regras, singleton, decks) {
+  const regras_function = {
+    cardlock: checkCardlock,
+    regionlock: checkRegionlock,
+    riotlock: checkRiotlock,
+    collectionlock: checkCollectionlock,
+  };
+  const repetidas = regras_function[regras](decks);
+
+  if (singleton) {
+    repetidas.push.apply(repetidas, checkSingleton(decks));
+  }
+
+  return repetidas;
+}
 
 async function checkDecks(r, s, d) {
   let regra,
@@ -337,8 +427,8 @@ async function checkDecks(r, s, d) {
     decks = [];
 
   if (!r || !s || !d) {
-    regra = document.querySelector("#regra").value;
-    singleton = document.querySelector("#singleton").checked;
+    regra = document.querySelector("#regra_jogador").value;
+    singleton = document.querySelector("#singleton_jogador").checked;
     for (let i = 1; i <= numDecks; ++i) {
       decks.push(document.querySelector(`#deck${i}`).value);
     }
@@ -348,40 +438,20 @@ async function checkDecks(r, s, d) {
     decks = d;
   }
 
-  const veredito = document.querySelector("#veredito");
-  const decks_element = document.querySelector("#decks");
   let html = "";
 
-  veredito.classList.remove("tudo-certo");
-  veredito.classList.remove("erro");
-  veredito.innerHTML =
-    '<h1><i class="fa fa-spinner fa-spin fa-fw"></i> Loading...</h1>';
-  decks_element.innerHTML = "";
+  renderLoading(true);
+  renderDecks("");
 
   if (decks.some((item) => item === "")) {
-    veredito.classList.add("erro");
-    veredito.innerHTML = '<h1 class="error">There is an empty field.</h1>';
+    renderVerdict("erro", "There is an empty field.");
     return;
   }
 
   for (let i = 0; i < numDecks; ++i) {
-    try {
-      const code = decks[i];
-      const response = await fetch(
-        `https://escolaruneterra.herokuapp.com/deck/decode?deck=${code}&locale=${locale}`
-      );
-
-      if (response.ok) {
-        const result = await response.json();
-        decks[i] = result;
-      } else {
-        veredito.classList.add("erro");
-        veredito.innerHTML = '<h1 class="error">There is an invalid code.</h1>';
-        return;
-      }
-    } catch (error) {
-      veredito.classList.add("erro");
-      veredito.innerHTML = '<h1 class="error">There is an invalid code.</h1>';
+    decks[i] = await convertDeck(decks[i], locale);
+    if (decks[i] == null) {
+      renderVerdict("erro", "There is an invalid code.");
       return;
     }
   }
@@ -389,14 +459,9 @@ async function checkDecks(r, s, d) {
   decks.forEach((deck, index) => {
     html += viewDeck(deck, index);
   });
-  decks_element.innerHTML = html;
-  document.querySelector("#content").style.marginBottom = "80px";
+  renderDecks(html);
 
-  const repetidas = regras_function[regra](decks);
-
-  if (singleton) {
-    repetidas.push.apply(repetidas, checkSingleton(decks));
-  }
+  const repetidas = checkRules(regra, singleton, decks);
 
   repetidas.forEach((repetida) => {
     const elements = document.getElementsByName(repetida);
@@ -406,9 +471,173 @@ async function checkDecks(r, s, d) {
   });
 
   if (repetidas.length == 0) {
-    veredito.classList.add("tudo-certo");
-    veredito.innerHTML = "<h1>Ready to go!</h1>";
+    renderVerdict("tudo-certo", "Ready to go!");
   } else {
-    veredito.innerHTML = "";
+    renderVerdict("erro", "");
   }
+}
+
+function togglePlayerOrganizer(player) {
+  const elementPlayer = document.getElementById("jogador");
+  const elementOrganizer = document.getElementById("organizador");
+
+  if (player) {
+    elementOrganizer.classList.add("hide");
+    elementPlayer.classList.remove("hide");
+  } else {
+    elementPlayer.classList.add("hide");
+    elementOrganizer.classList.remove("hide");
+  }
+}
+
+function togglePlayerColumn() {
+  const element = document.getElementById("player_column_number");
+  element.classList.toggle("hide");
+}
+
+function getDeckRow(deck, deck_index, repetidas) {
+  const filteredRegions = deck.regions.filter((region) =>
+    repetidas.includes(region)
+  );
+  const regions_string = getRegionsString(deck.regions);
+  const filteredRegionString = repetidas.includes(regions_string);
+  const filteredChampions = deck.champions.filter((champion) =>
+    repetidas.includes(champion)
+  );
+  const filteredNoChampion = repetidas.includes("no-champion");
+  const filteredDeck = deck.cards.filter((card) =>
+    repetidas.includes(card.cardCode)
+  );
+  let filteredSingleton = repetidas.filter(
+    (code) => code.includes("_") && code.split("_")[1] == deck_index
+  );
+  filteredSingleton = filteredSingleton.map((code) => code.split("_")[0]);
+  filteredSingleton = deck.cards.filter((card) =>
+    filteredSingleton.includes(card.cardCode)
+  );
+  let row = "";
+
+  if (
+    filteredRegions.length > 0 ||
+    filteredRegionString ||
+    filteredChampions.length > 0 ||
+    filteredNoChampion ||
+    filteredDeck.length > 0 ||
+    filteredSingleton > 0
+  ) {
+    row += `<span>Deck ${deck_index}</span>`;
+  }
+
+  filteredRegions.forEach((region) => {
+    row += `<li>${getRegionName(region)}</li>`;
+  });
+  if (filteredRegionString) {
+    row += `<li>${getRegionsName(deck.regions)}</li>`;
+  }
+  filteredChampions.forEach((champion) => {
+    row += `<li>${getChampionName(champion)}</li>`;
+  });
+  if (filteredNoChampion) {
+    row += `<li>No Champion</li>`;
+  }
+  filteredDeck.forEach((card) => {
+    row += `<li>${card.name}</li>`;
+  });
+  filteredSingleton.forEach((card) => {
+    row += `<li>${card.name} (more than one copy)</li>`;
+  });
+
+  row += "</ul>";
+  return row;
+}
+
+async function getPlayerRow(playerName, regra, singleton, playerDecks) {
+  let decksValidos = true;
+  let row = `<tr><td>${playerName}</td>`;
+  for (let i = 0; i < playerDecks.length; ++i) {
+    console.log(playerDecks[i]);
+    playerDecks[i] = await convertDeck(playerDecks[i], locale);
+    console.log(playerDecks[i]);
+    if (playerDecks[i] == null) {
+      if (decksValidos) {
+        row += "<td><ul>";
+      }
+      row += `<li>Deck ${i + 1} has an empty or invalid code.</li>`;
+      decksValidos = false;
+    }
+  }
+
+  if (!decksValidos) {
+    row += "</ul></td>";
+    return row;
+  }
+
+  const repetidas = checkRules(regra, singleton, playerDecks, true);
+
+  if (repetidas.length > 0) {
+    row += "<td>";
+    playerDecks.forEach(
+      (deck, index) => (row += getDeckRow(deck, index + 1, repetidas))
+    );
+    row += "</td></tr>";
+    return row;
+  } else {
+    row += "<td>Ready to go!</td></tr>";
+    return row;
+  }
+}
+
+function checkManyDecks() {
+  const regra = document.getElementById("regra_organizador").value;
+  const singleton = document.getElementById("singleton_organizador").checked;
+  const file = document.getElementById("file").files[0];
+  const header = document.getElementById("header").checked;
+  const playerIndex = document.getElementById("player_column").checked
+    ? document.getElementById("player_column_number").value
+    : -1;
+  const numberOfDecks = +document.getElementById("decks_number").value;
+  const firstDeckIndex = document.getElementById("decks_index").value;
+
+  document.getElementById("file").value = "";
+
+  renderLoading(true, 0);
+
+  if (file == undefined) {
+    renderLoading(false);
+    renderVerdict("erro", "No file was selected.");
+  }
+
+  Papa.parse(file, {
+    config: {
+      header: header,
+    },
+    complete: async function (results) {
+      let message = "<table><tr><th>Player</th><th>Message</th></tr>";
+      const data = results.data;
+      const numberOfPlayers = data.length;
+
+      renderDecks("");
+
+      for (let i = 0; i < numberOfPlayers; ++i) {
+        const playerName =
+          playerIndex == -1 ? `Player ${i + 1}` : data[i][playerIndex - 1];
+        const playerDecks = data[i].slice(
+          firstDeckIndex - 1,
+          firstDeckIndex - 1 + numberOfDecks
+        );
+
+        message += await getPlayerRow(
+          playerName,
+          regra,
+          singleton,
+          playerDecks
+        );
+        renderLoading(true, (i + 1) / numberOfPlayers);
+      }
+
+      renderLoading(false);
+      message += "</table>";
+      renderDecks(message);
+    },
+  });
 }

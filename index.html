@@ -14,6 +14,11 @@
 
 		<header id="formulario">
 			<div class="row">
+				<button class="button" onClick="togglePlayerOrganizer(true);">Player</button>
+				<button class="button" onClick="togglePlayerOrganizer(false);">Organizer</button>
+			</div>
+
+			<div class="row">
 				<label for="idioma">Language:</label>
 				<select id="idioma" name="idioma" onChange="changeLanguage(this.value);">
 					<option value="de_de">German (Germany)</option>
@@ -34,55 +39,104 @@
 				</select>
 			</div>
 
-			<div class="row">
-				<div id="regras">
-					<div class="tooltip" onClick="toggleDescription();"><i class="fa fa-question-circle botao-descricao" aria-hidden="true"></i>
-						<span id="tooltiptext" class="tooltiptext">
-							<ul>
-								<li><strong>Cardlock:</strong> every deck must have different cards from each other.</li>
-								<li><strong>Regionlock:</strong> every deck must have different regions from each other.</li>
-								<li><strong>Riotlock:</strong> every deck must have different champions and different combination of regions from each other. Also, it is only allowed at most one deck without champions.</li>
-								<li><strong>Collectionlock:</strong> the amount of a card among the decks must be at most 3 (three).</li>
-							</ul>
-						</span>
-					</div>
-					<label for="regra">Rule:</label>
-					<select id="regra" name="regra">
-						<option value="cardlock">Cardlock</option>
-						<option value="regionlock">Regionlock</option>
-						<option value="riotlock">Riotlock</option>
-						<option value="collectionlock">Collectionlock</option>
-					</select>
+			<div id="jogador" class="secao">
+				<div class="flex">
+					<div id="regras">
+						<div class="tooltip" onClick="toggleDescription();"><i class="fa fa-question-circle botao-descricao" aria-hidden="true"></i>
+							<span id="tooltiptext" class="tooltiptext">
+								<ul>
+									<li><strong>Cardlock:</strong> every deck must have different cards from each other.</li>
+									<li><strong>Regionlock:</strong> every deck must have different regions from each other.</li>
+									<li><strong>Riotlock:</strong> every deck must have different champions and different combination of regions from each other. Also, it is only allowed at most one deck without champions.</li>
+									<li><strong>Collectionlock:</strong> the amount of a card among the decks must be at most 3 (three).</li>
+								</ul>
+							</span>
+						</div>
+						<label for="regra_jogador">Rule:</label>
+						<select id="regra_jogador" name="regra_jogador">
+							<option value="cardlock">Cardlock</option>
+							<option value="regionlock">Regionlock</option>
+							<option value="riotlock">Riotlock</option>
+							<option value="collectionlock">Collectionlock</option>
+						</select>
 
-					<label for="singleton">Singleton: </label>
-					<input type="checkbox" id="singleton" name="singleton"/>
+						<label for="singleton_jogador">Singleton: </label>
+						<input type="checkbox" id="singleton_jogador" name="singleton_jogador"/>
+					</div>
+
+					<div id="one_player_decks">
+						<div id="decks_input">
+							<div>
+								<input type="text" id="deck1" name="deck1" placeholder="Deck Code 1"></input>
+							</div>
+							<div>
+								<input type="text" id="deck2" name="deck2" placeholder="Deck Code 2"></input>
+							</div>
+							<div>
+								<input type="text" id="deck3" name="deck3" placeholder="Deck Code 3"></input>
+							</div>
+						</div>
+
+						<div id="decks_buttons">
+							<div>
+								<button class="button" onClick="addDeckForm();">+</button>
+							</div>
+							<div>
+								<button class="button" onClick="removeDeckForm();">-</button>
+							</div>
+						</div>
+					</div>
 				</div>
 
-				<div id="one_player_decks">
-					<div id="decks_input">
-						<div>
-							<input type="text" id="deck1" name="deck1" placeholder="Deck Code 1"></input>
-						</div>
-						<div>
-							<input type="text" id="deck2" name="deck2" placeholder="Deck Code 2"></input>
-						</div>
-						<div>
-							<input type="text" id="deck3" name="deck3" placeholder="Deck Code 3"></input>
-						</div>
-					</div>
-
-					<div id="decks_buttons">
-						<div>
-							<button class="button" onClick="addDeckForm();">+</button>
-						</div>
-						<div>
-							<button class="button" onClick="removeDeckForm();">-</button>
-						</div>
-					</div>
-				</div>
+				<button id="check_decks" class="button check" onClick="checkDecks();">Check</button>
 			</div>
 
-			<button id="check_decks" class="button" onClick="checkDecks();">Check</button>
+			<div id="organizador" class="secao hide">
+				<div class="flex">
+					<div id="regras">
+						<div class="tooltip" onClick="toggleDescription();"><i class="fa fa-question-circle botao-descricao" aria-hidden="true"></i>
+							<span id="tooltiptext" class="tooltiptext">
+								<ul>
+									<li><strong>Cardlock:</strong> every deck must have different cards from each other.</li>
+									<li><strong>Regionlock:</strong> every deck must have different regions from each other.</li>
+									<li><strong>Riotlock:</strong> every deck must have different champions and different combination of regions from each other. Also, it is only allowed at most one deck without champions.</li>
+									<li><strong>Collectionlock:</strong> the amount of a card among the decks must be at most 3 (three).</li>
+								</ul>
+							</span>
+						</div>
+						<label for="regra_organizador">Rule:</label>
+						<select id="regra_organizador" name="regra_organizador">
+							<option value="cardlock">Cardlock</option>
+							<option value="regionlock">Regionlock</option>
+							<option value="riotlock">Riotlock</option>
+							<option value="collectionlock">Collectionlock</option>
+						</select>
+
+						<label for="singleton_organizador">Singleton: </label>
+						<input type="checkbox" id="singleton_organizador" name="singleton_organizador"/>
+					</div>
+
+					<div id="organizador_opcoes">
+						<label for="file">CSV file:</label>
+						<input type="file" id="file" name="file" accept=".csv"/>
+
+						<label for="header">Header: </label>
+						<input type="checkbox" id="header" name="header"/>
+
+						<label for="player_column">Player name column: </label>
+						<input type="checkbox" id="player_column" name="player_column" onChange="togglePlayerColumn();"/>
+						<input type="number" id="player_column_number" class="hide" name="player_column_number" min="1" step="1" value="1"/>
+
+						<label for="decks_number">Number of decks:</label>
+						<input type="number" id="decks_number" name="decks_number" min="1" step="1" value="3"/>
+
+						<label for="decks_index">Column of first deck:</label>
+						<input type="number" id="decks_index" name="decks_index" min="1" step="1" value="1"/>
+					</div>
+				</div>
+
+				<button id="check_decks_organizador" class="button check" onClick="checkManyDecks();">Check</button>
+			</div>
 		</header>
 		
 		
