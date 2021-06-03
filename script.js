@@ -39,6 +39,7 @@ const championNames = {
   TahmKench: "Tahm Kench",
   TwistedFate: "Twisted Fate",
   AurelionSol: "Aurelion Sol",
+  Leblanc: "LeBlanc",
 };
 
 function getRegionName(region) {
@@ -184,7 +185,7 @@ function renderDeckPreview(deck) {
 }
 
 function compare(a, b) {
-  if (a.mana == b.mana) {
+  if (a.cost == b.cost) {
     if (a.name < b.name) {
       return -1;
     } else if (a.name == b.name) {
@@ -193,7 +194,7 @@ function compare(a, b) {
       return 1;
     }
   } else {
-    if (a.mana < b.mana) {
+    if (a.cost < b.cost) {
       return -1;
     } else {
       return 1;
@@ -205,7 +206,7 @@ function renderSession(cards, index, title) {
   let html = `<h2 class="session-title"><span>${title}</span><span>${cards.length}</span></h2>`;
   if (cards.length > 0) {
     cards.forEach((card) => {
-      html += `<div id="${card.cardCode}_${index}" class="card ${card.region}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.mana}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qty}</span></div>`;
+      html += `<div id="${card.cardCode}_${index}" class="card ${card.region}" name="${card.cardCode}"><div class="mana-nome"><span class="mana">${card.cost}</span><span class="nome">${card.name}</span></div><span class="qtd">x${card.qty}</span></div>`;
     });
   }
 
@@ -396,7 +397,19 @@ async function convertDeck(code, locale) {
 
     if (response.ok) {
       const result = await response.json();
-      return result;
+      return {
+        ...result,
+        cards: result.cards.map((card) => {
+          return {
+            region: card.region,
+            cost: card.cost,
+            name: card.name,
+            cardCode: card.cardCode,
+            type: card.supertype === "champion" ? card.supertype : card.type,
+            qty: card.qty,
+          };
+        }),
+      };
     } else {
       return null;
     }
@@ -450,6 +463,7 @@ async function checkDecks(r, s, d) {
 
   for (let i = 0; i < numDecks; ++i) {
     decks[i] = await convertDeck(decks[i], locale);
+    console.log(decks[i]);
     if (decks[i] == null) {
       renderVerdict("erro", "There is an invalid code.");
       return;
