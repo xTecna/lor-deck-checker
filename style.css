@@ -350,6 +350,10 @@ input[type="number"] {
   background: linear-gradient(90deg, #b19155 0%, #00000000 100%);
 }
 
+.bandlecity {
+  background: linear-gradient(90deg, #8faa00 0%, #00000000 100%);
+}
+
 .repetida {
   border: #ff0000 5px solid;
 }
