@@ -32,6 +32,7 @@ const regionNames = {
   bilgewater: "Bilgewater",
   targon: "Mt Targon",
   shurima: "Shurima",
+  bandlecity: "Bandle City",
 };
 const championNames = {
   JarvanIV: "Jarvan IV",
