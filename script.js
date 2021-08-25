@@ -178,7 +178,7 @@ function renderDeckPreview(deck) {
     html += `<div class="campeao" name="sem-campeao"></div>`;
   }
   deck.champions.forEach((champion) => {
-    html += `<div class="campeao" name="${champion}" style="background-image: url('http://ddragon.leagueoflegends.com/cdn/10.15.1/img/champion/${champion}.png');"></div>`;
+    html += `<div class="campeao" name="${champion}" style="background-image: url('http://ddragon.leagueoflegends.com/cdn/11.16.1/img/champion/${champion}.png');"></div>`;
   });
   html += "</div></div>";
 
