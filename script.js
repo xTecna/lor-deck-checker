@@ -402,7 +402,7 @@ async function convertDeck(code, locale) {
         ...result,
         cards: result.cards.map((card) => {
           return {
-            region: card.region,
+            regions: card.regions,
             cost: card.cost,
             name: card.name,
             cardCode: card.cardCode,
