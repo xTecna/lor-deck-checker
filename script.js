@@ -17,6 +17,8 @@ const availableLanguages = [
 ];
 let locale = getGameLanguage();
 let numDecks = 3;
+let cardDataHandler = new CardDataHandler();
+let lorDeckEncoder = new LorDeckEncoder(cardDataHandler);
 setGameLanguage(locale);
 const parameters = urlParameters();
 if (parameters) {
@@ -33,6 +35,7 @@ const regionNames = {
   targon: "Mt Targon",
   shurima: "Shurima",
   bandlecity: "Bandle City",
+  runeterra: "Runeterra"
 };
 const championNames = {
   JarvanIV: "Jarvan IV",
@@ -42,6 +45,7 @@ const championNames = {
   AurelionSol: "Aurelion Sol",
   Leblanc: "LeBlanc",
 };
+const originChampions = ["Jhin", "Bard"];
 
 function getRegionName(region) {
   return regionNames[region];
@@ -111,6 +115,8 @@ function setGameLanguage(locale) {
   languageElement.value = locale;
 
   localStorage.setItem("locale", locale);
+
+  cardDataHandler.getDataFromLocale(locale);
 }
 
 function changeLanguage(newLocale) {
@@ -171,7 +177,11 @@ function renderDeckPreview(deck) {
 
   let html = `<div class="resumo-deck"><div class="regioes" name="${regions_string}">`;
   deck.regions.forEach((region) => {
-    html += `<div class="regiao" name="${region}" style="background-image: url('http://dd.b.pvp.net/latest/core/en_us/img/regions/icon-${region}.png');"></div>`;
+    if (originChampions.includes(region)) {
+      html += `<div class="regiao" name="${region}" style="background-image: url('http://ddragon.leagueoflegends.com/cdn/11.16.1/img/champion/${region}.png');"></div>`;
+    } else {
+      html += `<div class="regiao" name="${region}" style="background-image: url('http://dd.b.pvp.net/latest/core/en_us/img/regions/icon-${region}.png');"></div>`;
+    }
   });
   html += '</div><div class="campeoes">';
   if (deck.champions.length == 0) {
@@ -365,9 +375,8 @@ function renderLoading(loading, number = -1) {
 
   if (loading) {
     veredito.classList.remove(...veredito.classList);
-    veredito.innerHTML = `<h1><i class="fa fa-spinner fa-spin fa-fw"></i> Loading...${
-      number > -1 ? ` (${(number * 100).toFixed(2)}%)` : ""
-    }</h1>`;
+    veredito.innerHTML = `<h1><i class="fa fa-spinner fa-spin fa-fw"></i> Loading...${number > -1 ? ` (${(number * 100).toFixed(2)}%)` : ""
+      }</h1>`;
   } else {
     veredito.innerHTML = "";
   }
@@ -388,32 +397,11 @@ function renderDecks(html) {
   document.querySelector("#content").style.marginBottom = "80px";
 }
 
-async function convertDeck(code, locale) {
+function convertDeck(code) {
   try {
     if (code === "") return null;
 
-    const response = await fetch(
-      `https://escolaruneterra.herokuapp.com/deck/decode?deck=${code}&locale=${locale}`
-    );
-
-    if (response.ok) {
-      const result = await response.json();
-      return {
-        ...result,
-        cards: result.cards.map((card) => {
-          return {
-            region: card.regions[0],
-            cost: card.cost,
-            name: card.name,
-            cardCode: card.cardCode,
-            type: card.supertype === "champion" ? card.supertype : card.type,
-            qty: card.qty,
-          };
-        }),
-      };
-    } else {
-      return null;
-    }
+    return lorDeckEncoder.getDeckFromCode(code);
   } catch (error) {
     return null;
   }
@@ -435,7 +423,7 @@ function checkRules(regras, singleton, decks) {
   return repetidas;
 }
 
-async function checkDecks(r, s, d) {
+function checkDecks(r, s, d) {
   let regra,
     singleton,
     decks = [];
@@ -463,8 +451,7 @@ async function checkDecks(r, s, d) {
   }
 
   for (let i = 0; i < numDecks; ++i) {
-    decks[i] = await convertDeck(decks[i], locale);
-    console.log(decks[i]);
+    decks[i] = convertDeck(decks[i]);
     if (decks[i] == null) {
       renderVerdict("erro", "There is an invalid code.");
       return;
@@ -566,12 +553,12 @@ function getDeckRow(deck, deck_index, repetidas) {
   return row;
 }
 
-async function getPlayerRow(playerName, regra, singleton, playerDecks) {
+function getPlayerRow(playerName, regra, singleton, playerDecks) {
   let decksValidos = true;
   let row = `<tr><td>${playerName}</td>`;
   for (let i = 0; i < playerDecks.length; ++i) {
     console.log(playerDecks[i]);
-    playerDecks[i] = await convertDeck(playerDecks[i], locale);
+    playerDecks[i] = convertDeck(playerDecks[i]);
     console.log(playerDecks[i]);
     if (playerDecks[i] == null) {
       if (decksValidos) {
@@ -626,7 +613,7 @@ function checkManyDecks() {
     config: {
       header: header,
     },
-    complete: async function (results) {
+    complete: function (results) {
       let message = "<table><tr><th>Player</th><th>Message</th></tr>";
       const data = results.data;
       const numberOfPlayers = data.length;
@@ -641,7 +628,7 @@ function checkManyDecks() {
           firstDeckIndex - 1 + numberOfDecks
         );
 
-        message += await getPlayerRow(
+        message += getPlayerRow(
           playerName,
           regra,
           singleton,

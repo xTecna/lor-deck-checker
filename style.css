@@ -67,7 +67,7 @@ footer {
   flex-wrap: wrap;
 }
 
-#formulario > .row {
+#formulario>.row {
   display: flex;
   flex-direction: row;
 }
@@ -354,6 +354,10 @@ input[type="number"] {
   background: linear-gradient(90deg, #8faa00 0%, #00000000 100%);
 }
 
+.runeterra {
+  background: linear-gradient(90deg, #665332 0%, #00000000 100%);
+}
+
 .repetida {
   border: #ff0000 5px solid;
 }
@@ -414,7 +418,7 @@ footer {
   color: rgb(207, 207, 207);
 }
 
-footer > h5 {
+footer>h5 {
   margin: 0;
 }
 
@@ -450,7 +454,7 @@ footer a:hover {
       "footer";
   }
 
-  #formulario > .row {
+  #formulario>.row {
     display: flex;
     flex-direction: column;
   }

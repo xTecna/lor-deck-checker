@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Tournament Rules Checker</title>
-		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400&display=swap" rel="stylesheet"> 
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-		<link rel='stylesheet' href='style.css'/>
-	</head>
-	<body>
-		<h1>Tournament Rules Checker</h1>
-		<section id="site">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Tournament Rules Checker</title>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel='stylesheet' href='style.css' />
+</head>
+
+<body>
+	<h1>Tournament Rules Checker</h1>
+	<section id="site">
 
 		<header id="formulario">
 			<div class="row">
@@ -42,13 +44,19 @@
 			<div id="jogador" class="secao">
 				<div class="flex">
 					<div id="regras">
-						<div class="tooltip" onClick="toggleDescription();"><i class="fa fa-question-circle botao-descricao" aria-hidden="true"></i>
+						<div class="tooltip" onClick="toggleDescription();"><i
+								class="fa fa-question-circle botao-descricao" aria-hidden="true"></i>
 							<span id="tooltiptext" class="tooltiptext">
 								<ul>
-									<li><strong>Cardlock:</strong> every deck must have different cards from each other.</li>
-									<li><strong>Regionlock:</strong> every deck must have different regions from each other.</li>
-									<li><strong>Riotlock:</strong> every deck must have different champions and different combination of regions from each other. Also, it is only allowed at most one deck without champions.</li>
-									<li><strong>Collectionlock:</strong> the amount of a card among the decks must be at most 3 (three).</li>
+									<li><strong>Cardlock:</strong> every deck must have different cards from each other.
+									</li>
+									<li><strong>Regionlock:</strong> every deck must have different regions from each
+										other.</li>
+									<li><strong>Riotlock:</strong> every deck must have different champions and
+										different combination of regions from each other. Also, it is only allowed at
+										most one deck without champions.</li>
+									<li><strong>Collectionlock:</strong> the amount of a card among the decks must be at
+										most 3 (three).</li>
 								</ul>
 							</span>
 						</div>
@@ -61,7 +69,7 @@
 						</select>
 
 						<label for="singleton_jogador">Singleton: </label>
-						<input type="checkbox" id="singleton_jogador" name="singleton_jogador"/>
+						<input type="checkbox" id="singleton_jogador" name="singleton_jogador" />
 					</div>
 
 					<div id="one_player_decks">
@@ -94,13 +102,19 @@
 			<div id="organizador" class="secao hide">
 				<div class="flex">
 					<div id="regras">
-						<div class="tooltip" onClick="toggleDescription();"><i class="fa fa-question-circle botao-descricao" aria-hidden="true"></i>
+						<div class="tooltip" onClick="toggleDescription();"><i
+								class="fa fa-question-circle botao-descricao" aria-hidden="true"></i>
 							<span id="tooltiptext" class="tooltiptext">
 								<ul>
-									<li><strong>Cardlock:</strong> every deck must have different cards from each other.</li>
-									<li><strong>Regionlock:</strong> every deck must have different regions from each other.</li>
-									<li><strong>Riotlock:</strong> every deck must have different champions and different combination of regions from each other. Also, it is only allowed at most one deck without champions.</li>
-									<li><strong>Collectionlock:</strong> the amount of a card among the decks must be at most 3 (three).</li>
+									<li><strong>Cardlock:</strong> every deck must have different cards from each other.
+									</li>
+									<li><strong>Regionlock:</strong> every deck must have different regions from each
+										other.</li>
+									<li><strong>Riotlock:</strong> every deck must have different champions and
+										different combination of regions from each other. Also, it is only allowed at
+										most one deck without champions.</li>
+									<li><strong>Collectionlock:</strong> the amount of a card among the decks must be at
+										most 3 (three).</li>
 								</ul>
 							</span>
 						</div>
@@ -113,33 +127,35 @@
 						</select>
 
 						<label for="singleton_organizador">Singleton: </label>
-						<input type="checkbox" id="singleton_organizador" name="singleton_organizador"/>
+						<input type="checkbox" id="singleton_organizador" name="singleton_organizador" />
 					</div>
 
 					<div id="organizador_opcoes">
 						<label for="file">CSV file:</label>
-						<input type="file" id="file" name="file" accept=".csv"/>
+						<input type="file" id="file" name="file" accept=".csv" />
 
 						<label for="header">Header: </label>
-						<input type="checkbox" id="header" name="header"/>
+						<input type="checkbox" id="header" name="header" />
 
 						<label for="player_column">Player name column: </label>
-						<input type="checkbox" id="player_column" name="player_column" onChange="togglePlayerColumn();"/>
-						<input type="number" id="player_column_number" class="hide" name="player_column_number" min="1" step="1" value="1"/>
+						<input type="checkbox" id="player_column" name="player_column"
+							onChange="togglePlayerColumn();" />
+						<input type="number" id="player_column_number" class="hide" name="player_column_number" min="1"
+							step="1" value="1" />
 
 						<label for="decks_number">Number of decks:</label>
-						<input type="number" id="decks_number" name="decks_number" min="1" step="1" value="3"/>
+						<input type="number" id="decks_number" name="decks_number" min="1" step="1" value="3" />
 
 						<label for="decks_index">Column of first deck:</label>
-						<input type="number" id="decks_index" name="decks_index" min="1" step="1" value="1"/>
+						<input type="number" id="decks_index" name="decks_index" min="1" step="1" value="1" />
 					</div>
 				</div>
 
 				<button id="check_decks_organizador" class="button check" onClick="checkManyDecks();">Check</button>
 			</div>
 		</header>
-		
-		
+
+
 		<main id="content">
 			<div id="veredito">
 			</div>
@@ -147,34 +163,43 @@
 			</div>
 		</main>
 
-			<footer>
+		<footer>
 
-				<h5>Made with ❤️ by xTecna and Alô Renato. UI by Ismael.</h5>
+			<h5>Made with ❤️ by xTecna and Alô Renato. UI by Ismael.</h5>
 
-				<span>
-					<i class="fa fa-github" aria-hidden="true"></i> 
-					<a href="https://github.com/xTecna/lor-deck-checker" target="_blank">Source code at GitHub</a> (vanilla JavaScript)
-				</span>
+			<span>
+				<i class="fa fa-github" aria-hidden="true"></i>
+				<a href="https://github.com/xTecna/lor-deck-checker" target="_blank">Source code at GitHub</a> (vanilla
+				JavaScript)
+			</span>
 
-				<span>
-					xTecna: <i class="fa fa-github" aria-hidden="true"></i> 
-					<a href="https://github.com/xTecna" target="_blank">GitHub</a> 
-					<i class="fa fa-twitch" aria-hidden="true"></i> 
-					<a href="https://www.twitch.tv/xtecna" target="_blank">Twitch</a> 
-					<i class="fa fa-twitter" aria-hidden="true"></i> <a href="https://twitter.com/WNXTecna" 
-					target="_blank">Twitter</a> • Ismael: <i class="fa fa-twitter" aria-hidden="true"></i> <a href="https://www.twitter.com/exanimum" target="_blank">Twitter</a> • Alô Renato: <i class="fa fa-github" aria-hidden="true"></i> <a href="https://github.com/renatocesarramos" target="_blank">GitHub</a> <i class="fa fa-twitch" aria-hidden="true"></i> <a href="https://twitch.tv/alorenato" target="_blank">Twitch</a> <i class="fa fa-twitter" aria-hidden="true"></i> <a href="https://twitter.com/_RenatoRamos" target="_blank">Twitter</a>
-				</span>
+			<span>
+				xTecna: <i class="fa fa-github" aria-hidden="true"></i>
+				<a href="https://github.com/xTecna" target="_blank">GitHub</a>
+				<i class="fa fa-twitch" aria-hidden="true"></i>
+				<a href="https://www.twitch.tv/xtecna" target="_blank">Twitch</a>
+				<i class="fa fa-twitter" aria-hidden="true"></i> <a href="https://twitter.com/WNXTecna"
+					target="_blank">Twitter</a> • Ismael: <i class="fa fa-twitter" aria-hidden="true"></i> <a
+					href="https://www.twitter.com/exanimum" target="_blank">Twitter</a> • Alô Renato: <i
+					class="fa fa-github" aria-hidden="true"></i> <a href="https://github.com/renatocesarramos"
+					target="_blank">GitHub</a> <i class="fa fa-twitch" aria-hidden="true"></i> <a
+					href="https://twitch.tv/alorenato" target="_blank">Twitch</a> <i class="fa fa-twitter"
+					aria-hidden="true"></i> <a href="https://twitter.com/_RenatoRamos" target="_blank">Twitter</a>
+			</span>
 
-				<span>
-					🃏🏆 Acesse <a href="https://escolaruneterra.com.br/" target="_blank">Escola Runeterra</a> para artigos e decks do meta! 🏆🃏
-				</span>
+			<span>
+				🃏🏆 Acesse <a href="https://escolaruneterra.com.br/" target="_blank">Escola Runeterra</a> para artigos
+				e decks do meta! 🏆🃏
+			</span>
 
-					
 
-			</footer>
 
-		</section>
-		<script src="https://unpkg.com/papaparse@5.3.0/papaparse.min.js"></script>
-		<script src="script.js"></script>
-	</body>
+		</footer>
+
+	</section>
+	<script src="https://unpkg.com/papaparse@5.3.0/papaparse.min.js"></script>
+	<script src="decoder.js"></script>
+	<script src="script.js"></script>
+</body>
+
 </html>
