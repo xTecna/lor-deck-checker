@@ -227,7 +227,7 @@ class LorDeckEncoder {
         let format = firstByte >> 4;
         let version = firstByte & 0xF;
 
-        if (format !== this.format) {
+        if (format > this.format) {
             throw new TypeError("The provided code does not match the required format.");
         }
         if (version > this.maxKnownVersion) {
