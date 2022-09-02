@@ -44,8 +44,11 @@ const championNames = {
   TwistedFate: "Twisted Fate",
   AurelionSol: "Aurelion Sol",
   Leblanc: "LeBlanc",
+  RekSai: "Rek'Sai",
+  Kaisa: "Kai'Sa",
+  MasterYi: "Master Yi"
 };
-const originChampions = ["Jhin", "Bard"];
+const originChampions = ["Jhin", "Bard", "Evelynn", "Kayn", "Jax"];
 
 function getRegionName(region) {
   return regionNames[region];
@@ -228,6 +231,7 @@ function viewDeck(deck, index) {
   let champions = [];
   let followers = [];
   let spells = [];
+  let equipments = [];
   let landmarks = [];
 
   deck.cards.sort(compare);
@@ -239,6 +243,8 @@ function viewDeck(deck, index) {
       followers.push(card);
     } else if (card.type == "spell") {
       spells.push(card);
+    } else if (card.type == "equipment") {
+      equipments.push(card);
     } else if (card.type == "landmark") {
       landmarks.push(card);
     }
@@ -250,6 +256,7 @@ function viewDeck(deck, index) {
   html += renderSession(champions, index, "Champions");
   html += renderSession(followers, index, "Followers");
   html += renderSession(spells, index, "Spells");
+  html += renderSession(equipments, index, "Equipments");
   html += renderSession(landmarks, index, "Landmarks");
   html += "</div></div>";
 
