@@ -40,15 +40,15 @@ class CardDataHandler {
         }
 
         let regions = [];
-        if (champions.includes("Jhin")) {
-            regions.push("Jhin");
+
+        let origins = champions.filter(champion => originChampions.includes(champion));
+        for (let origin of origins) {
+            regions.push(origin.nameRef);
         }
-        if (champions.includes("Bard")) {
-            regions.push("Bard");
-        }
+
         for (let card of convertedCards) {
-            if (champions.includes("Jhin") && card.origin["Jhin"]) {
-            } else if (champions.includes("Bard") && card.origin["Bard"]) {
+            if (origins.reduce((acc, cur) => acc + card.origin[acc.nameRef], 0) > 0) {
+                // It fits in this origin region
             } else if (card.regions.length === 1 && !regions.includes(card.regions[0])) {
                 regions.push(card.regions[0]);
             }
